@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++20 -Wall -MMD -Werror=vla
 SRCS = $(shell find . -type f -name "*.cc")
 OBJECTS = ${SRCS:.cc=.o}
 DEPENDS = ${OBJECTS:.o=.d}
-EXEC = NAME_OF_EXEC
+EXEC = cc3k
 
 .PHONY: all clean
 
