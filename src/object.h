@@ -3,6 +3,7 @@
 
 class Object {
     char label;
+    // std::string name;
 
     public:
         Object(const char label);

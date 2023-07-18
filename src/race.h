@@ -3,12 +3,12 @@
 
 #include "object.h"
 
-class Character: public Object {
+class Race: public Object {
     int score;
 
     public:
-        Character();
-        ~Character();
+        Race();
+        ~Race();
 };
 
 #endif

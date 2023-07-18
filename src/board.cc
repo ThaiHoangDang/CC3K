@@ -4,12 +4,53 @@
 #include <vector>
 #include <string>
 #include "board.h"
-#include "character.h"
+#include "race.h"
 #include "object.h"
 
 using namespace std;
 
-Board::Board(const std::string &map, Character &hero): hero {hero} {
+
+vector<vector<unique_ptr<Chamber>>> createChambers
+        (const vector<vector<char>> &maps, int height, int width) {
+
+    vector<vector<unique_ptr<Chamber>>> chambers;
+
+    for (const auto &it : maps) {
+        vector<unique_ptr<Chamber>> floorChambers;
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (it.at(i * width + j) == '.') {
+                    if (floorChambers.size() == 0) {
+                        floorChambers.emplace_back(make_unique<Chamber>
+                                (j, i, it, height, width));
+                    } else {
+                        bool is_in = false;
+                        for (auto &it : floorChambers) {
+                            if (it->is_in(j, i)) {
+                                is_in = true;
+                            }
+                        }
+
+                        if (! is_in) {
+                            floorChambers.emplace_back(make_unique<Chamber>
+                                    (j, i, it, height, width));
+                        }
+                    }
+                }
+            }
+        }
+        
+        // test number of chambers
+        // cout << "Number of chambers: " << floorChambers.size() << endl;
+        
+        chambers.emplace_back(std::move(floorChambers));
+    }
+
+    return chambers;
+}
+
+Board::Board(const std::string &map, Race &hero): hero {hero} {
     string line;
     ifstream f {"layout/" + map};
     getline(f, line);
@@ -24,6 +65,7 @@ Board::Board(const std::string &map, Character &hero): hero {hero} {
                         line.at(j) != '.' && line.at(j) != ' ') {
                     floorObj.emplace_back(make_unique<Object>(line.at(j)));
                     // different for hero
+                    // randome algorithm, detect chambers
                     floorMap.emplace_back('.');
                 } else {
                     floorObj.emplace_back(nullptr);
@@ -36,6 +78,9 @@ Board::Board(const std::string &map, Character &hero): hero {hero} {
         objects.emplace_back(std::move(floorObj));
         maps.emplace_back(floorMap);
     }
+
+    chambers = createChambers(maps, height, width);
+
 }
 
 Board::~Board() {
@@ -55,3 +100,4 @@ void Board::display() {
         cout << endl;
     }
 }
+
