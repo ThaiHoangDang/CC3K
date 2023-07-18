@@ -4,7 +4,6 @@
 #include "object.h"
 
 class Race: public Object {
-    int score;
 
     public:
         Race();

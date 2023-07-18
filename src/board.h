@@ -8,9 +8,9 @@
 #include "chamber.h"
 
 class Board {
-    Race &hero;
+    std::shared_ptr<Object> hero;
     std::vector<std::vector<char>> maps;
-    std::vector<std::vector<std::unique_ptr<Object>>> objects;
+    std::vector<std::vector<std::shared_ptr<Object>>> objects;
     std::vector<std::vector<std::unique_ptr<Chamber>>> chambers;
 
     const int height = 25, width = 79;
@@ -18,7 +18,7 @@ class Board {
     std::string message;
 
     public:
-        Board(const std::string &map, Race &hero);
+        Board(const std::string &map, std::shared_ptr<Object> hero);
         ~Board();
         void display();
 };

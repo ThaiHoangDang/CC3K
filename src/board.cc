@@ -50,22 +50,25 @@ vector<vector<unique_ptr<Chamber>>> createChambers
     return chambers;
 }
 
-Board::Board(const std::string &map, Race &hero): hero {hero} {
+Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
     string line;
     ifstream f {"layout/" + map};
     getline(f, line);
-
+    
     while (line.length() != 0) {
         vector<char> floorMap;
-        vector<unique_ptr<Object>> floorObj;
+        vector<shared_ptr<Object>> floorObj;
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (line.at(j) != '|' && line.at(j) != '-' && 
                         line.at(j) != '#' && line.at(j) != '+' && 
                         line.at(j) != '.' && line.at(j) != ' ') {
-                    floorObj.emplace_back(make_unique<Object>(line.at(j)));
-                    // different for hero
-                    // randome algorithm, detect chambers
+                    if (line.at(j) == '@') {
+                        floorObj.emplace_back(hero);
+                    } else {
+                        floorObj.emplace_back(make_shared<Object>(line.at(j)));
+                    }
+                    // randome algorithm
                     floorMap.emplace_back('.');
                 } else {
                     floorObj.emplace_back(nullptr);
@@ -75,12 +78,12 @@ Board::Board(const std::string &map, Race &hero): hero {hero} {
             line.clear();
             getline(f, line);
         }
-        objects.emplace_back(std::move(floorObj));
+        objects.emplace_back(floorObj);
         maps.emplace_back(floorMap);
     }
 
     chambers = createChambers(maps, height, width);
-
+    
 }
 
 Board::~Board() {
