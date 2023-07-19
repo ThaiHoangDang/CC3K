@@ -30,6 +30,10 @@
 *.exe
 *.out
 *.app
+cc3k
 
 # Testing
 temp/
+
+# VS
+.vscode/
