@@ -7,3 +7,14 @@ Living::Living(char label, const std::string &name, const std::string &color,
 
 Living::~Living() {}
 
+int Living::getHp() { return hp; }
+
+int Living::getAtk() { return atk; }
+
+int Living::getDef() { return def; }
+
+void Living::setHp(int h) { hp = h; }
+
+void Living::setAtk(int a) { atk = a; }
+
+void Living::setDef(int d) { def = d; }

@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "object.h"
 
 using namespace std;
@@ -16,3 +17,7 @@ char Object::getlabel() {
 string Object::getColor() {
     return color;
 }
+
+void Object::setX(int x) { this->x = x; }
+
+void Object::setY(int y) { this->y = y; }

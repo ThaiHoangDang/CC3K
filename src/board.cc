@@ -105,6 +105,8 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
                         line.at(j) != '.' && line.at(j) != ' ') {
                     if (line.at(j) == '@') {
                         floorObj.emplace_back(hero);
+                        hero->setX(j);
+                        hero->setY(i);
                     } else {
                         floorObj.emplace_back(makeObjFromLabel(line.at(j), j, i));
                     }

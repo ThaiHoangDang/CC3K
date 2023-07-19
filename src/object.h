@@ -15,6 +15,8 @@ class Object {
         ~Object();
         char getlabel();
         std::string getColor();
+        void setX(int x);
+        void setY(int y);
 };
 
 #endif
