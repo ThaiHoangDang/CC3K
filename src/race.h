@@ -1,12 +1,12 @@
-#ifndef CHAR_H
-#define CHAR_H
+#ifndef RACE_H
+#define RACE_H
 
-#include "object.h"
+#include "living.h"
 
-class Race: public Object {
+class Race: public Living {
 
     public:
-        Race();
+        Race(const std::string &name, int x, int y, int hp, int atk, int def);
         ~Race();
 };
 

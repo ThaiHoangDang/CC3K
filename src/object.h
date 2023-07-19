@@ -3,10 +3,15 @@
 
 class Object {
     char label;
-    // std::string name;
+    std::string name;
+    std::string color;
+    int value;
+    int x;
+    int y;
 
     public:
-        Object(const char label);
+        Object(char label, const std::string &name, 
+            const std::string &color, int value, int x, int y);
         ~Object();
         char getlabel();
 };

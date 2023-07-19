@@ -14,9 +14,9 @@ void welcome() {
     cout << "________________________________" << endl << endl << endl;
 }
 
-unique_ptr<Object> pickHero() {
+// unique_ptr<Object> pickHero() {
 
-}
+// }
 
 void run(const string &map = "cc3k-emptySingleFloor.txt") {
     // welcome
@@ -24,7 +24,7 @@ void run(const string &map = "cc3k-emptySingleFloor.txt") {
 
     // choose race
     cout << "Choose your hero" << endl;
-    shared_ptr<Object> hero = make_shared<Race>();
+    shared_ptr<Object> hero = make_shared<Race>("Hoang", 0, 0, 1000, 1000, 1000);
 
     // generate map (Factory Method?)
     unique_ptr<Board> board = make_unique<Board>(map, hero);
@@ -44,6 +44,6 @@ int main(int argc, char *argv[]) {
         run();
     } else {
         string arg {argv[1]};
-        run();
+        run(arg);
     }
 }
