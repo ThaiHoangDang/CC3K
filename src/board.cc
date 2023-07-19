@@ -130,12 +130,21 @@ Board::~Board() {
 
 }
 
+int colorCode(const string &color) {
+    if (color == "blue") return 36;
+    if (color == "yellow") return 33;
+    if (color == "green") return 32;
+    else return 31;
+}
+
 void Board::display() {
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             if (objects.at(currentFloor).at(i * width + j) != nullptr) {
-                cout << objects.at(currentFloor).at(i * width + j)->getlabel();
+                string color = objects.at(currentFloor).at(i * width + j)->getColor();
+                cout << "\033[" << colorCode(color) << "m" << 
+                    objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
             } else {
                 cout << maps.at(currentFloor).at(i * width + j);
             }
@@ -143,4 +152,3 @@ void Board::display() {
         cout << endl;
     }
 }
-
