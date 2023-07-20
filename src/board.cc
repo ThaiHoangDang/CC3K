@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <iomanip>
 #include "board.h"
 #include "race.h"
 #include "object.h"
@@ -153,4 +154,16 @@ void Board::display() {
         }
         cout << endl;
     }
+
+    string temp1 = "Shade";
+    string temp2 = "100";
+    string temp3 = "1";
+    string firstLine = "Race: " + temp1 + " | " + "Gold: " + temp2;
+
+    cout << firstLine;
+    cout << setw(79 - firstLine.length()) << right << ("Floor " +  temp3) << endl;
+    cout << "HP: " << 125 << endl;
+    cout << "Atk: " << 25 << endl;
+    cout << "Def: " << 25 << endl;
+    cout << "Action: " << "DMNCN" << endl;
 }
