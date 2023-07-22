@@ -24,6 +24,10 @@
 #include "dragon.h"
 #include "halfling.h"
 #include "stair.h"
+#include "objectGenerator.h"
+#include "treasureGenerator.h"
+#include "enemyGenerator.h"
+#include "potionGenerator.h"
 
 using namespace std;
 
@@ -93,12 +97,28 @@ vector<vector<unique_ptr<Chamber>>> createChambers
     return chambers;
 }
 
+
+vector<int> getSpawnPlace(vector<unique_ptr<Chamber>> &floorChamber, 
+        vector<shared_ptr<Object>> &floorObject, int width) {
+    
+    while (true) {
+        int randomChamber = rand() % floorChamber.size();
+        vector<int> randomCell = floorChamber.at(randomChamber)->getRandomCell();
+
+        if (floorObject.at(randomCell.at(1) * width + randomCell.at(0)) == nullptr) {
+            return randomCell;
+        }
+    }
+}
+
+
 Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
     int numObj = 0;
     string line;
     ifstream f {"layout/" + map};
     getline(f, line);
     
+    // read map from file
     while (line.length() != 0) {
         vector<char> floorMap;
         vector<shared_ptr<Object>> floorObj;
@@ -110,8 +130,7 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
                     numObj++;
                     if (line.at(j) == '@') {
                         floorObj.emplace_back(hero);
-                        hero->setX(j);
-                        hero->setY(i);
+                        heroPositions.emplace_back(vector<int> {j, i});
                     } else {
                         floorObj.emplace_back(makeObjFromLabel(line.at(j), j, i));
                     }
@@ -128,16 +147,56 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
         maps.emplace_back(floorMap);
     }
 
+    // use algorithm to detect and create chambers
+    chambers = createChambers(maps, height, width);
+
+    // generate objects if input map is empty
     if (numObj == 0) {
-        
+
+        for (size_t i = 0; i < maps.size(); i++) {
+
+            // hero spawn
+            int heroChamber = rand() % chambers.at(i).size();
+            vector<int> heroPosition = chambers.at(i).at(heroChamber)->getRandomCell();
+            objects.at(i).at(heroPosition.at(1) * width + heroPosition.at(0)) = hero;
+            heroPositions.emplace_back(heroPosition);
+
+            // stair spawn
+            int stairChamber = heroChamber;
+            while (stairChamber == heroChamber) stairChamber = rand() % chambers.at(i).size();
+            vector<int> stairPosition = chambers.at(i).at(stairChamber)->getRandomCell();
+            objects.at(i).at(stairPosition.at(1) * width + stairPosition.at(0)) = 
+                make_shared<Stair>(stairPosition.at(0), stairPosition.at(1));
+            
+            // potions spawn
+            unique_ptr<ObjectGenerator> generator = make_unique<PotionGenerator>();
+            for (int p = 0; p < numPotions; p++) {
+                vector<int> pp = getSpawnPlace(chambers.at(i), objects.at(i), width);
+                objects.at(i).at(pp.at(1) * width + pp.at(0)) = generator->createObject(pp.at(0), pp.at(1));
+            }
+
+            // gold spawn
+            generator = make_unique<TreasureGenerator>();
+            for (int t = 0; t < numGold; t++) {
+                vector<int> gp = getSpawnPlace(chambers.at(i), objects.at(i), width);
+                objects.at(i).at(gp.at(1) * width + gp.at(0)) = generator->createObject(gp.at(0), gp.at(1));
+            }
+
+            // enemies spawn
+            generator = make_unique<EnemyGenerator>();
+            for (int e = 0; e < numEnemies; e++) {
+                vector<int> ep = getSpawnPlace(chambers.at(i), objects.at(i), width);
+                objects.at(i).at(ep.at(1) * width + ep.at(0)) = generator->createObject(ep.at(0), ep.at(1));
+            }
+        }
     }
 
-    chambers = createChambers(maps, height, width);
+    // set position for hero based on current floor
+    hero->setX(heroPositions.at(currentFloor).at(0));
+    hero->setY(heroPositions.at(currentFloor).at(1));
 }
 
-Board::~Board() {
-
-}
+Board::~Board() {}
 
 int colorCode(const string &color) {
     if (color == "blue") return 36;
@@ -147,6 +206,7 @@ int colorCode(const string &color) {
 }
 
 void Board::display() {
+    currentFloor = 4;
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
@@ -162,10 +222,12 @@ void Board::display() {
     }
 
     Race *heroPtr = static_cast<Race *>(hero.get());
-    string firstLine = "Race: " + heroPtr->getName() + " | " + "Gold: " + to_string(heroPtr->getValue());
+    string firstLine = "Race: " + heroPtr->getName() + " | " + 
+        "Gold: " + to_string(heroPtr->getValue());
 
     cout << firstLine;
-    cout << setw(79 - firstLine.length()) << right << ("Floor " +  to_string(currentFloor + 1)) << endl;
+    cout << setw(79 - firstLine.length()) << right << ("Floor " +  
+        to_string(currentFloor + 1)) << endl;
     cout << "HP: " << heroPtr->getHp() << endl;
     cout << "Atk: " << heroPtr->getAtk() << endl;
     cout << "Def: " << heroPtr->getDef() << endl;

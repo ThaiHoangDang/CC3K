@@ -51,7 +51,7 @@ shared_ptr<Object> pickHero() {
 }
 
 // run the game
-void run(const string &map = "cc3k-emptySingleFloor.txt") {
+void run(const string &map = "default.txt") {
     string input;
 
     // welcome message

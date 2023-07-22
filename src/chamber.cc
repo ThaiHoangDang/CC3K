@@ -1,5 +1,6 @@
 #include <vector>
 #include <iostream>
+#include <cstdlib>
 #include "chamber.h"
 
 using namespace std;
@@ -61,14 +62,6 @@ Chamber::Chamber(int x, int y, const std::vector<char> &floorMap, int height, in
             stack.emplace_back(vector<int> {x + 1, y});
         }
     }
-
-    // test value stored
-    // for (auto it : cells) {
-    //     cout << it.at(0) << " - " << it.at(1) << endl;
-    // }
-
-    // test size
-    // cout << cells.size() << endl;
 }
 
 Chamber::~Chamber() {}
@@ -80,4 +73,9 @@ bool Chamber::is_in(int x, int y) {
         }
     }
     return false;
+}
+
+vector<int> Chamber::getRandomCell() {
+    int random = rand() % cells.size();
+    return cells.at(random);
 }

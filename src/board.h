@@ -9,11 +9,12 @@
 
 class Board {
     std::shared_ptr<Object> hero;
+    std::vector<std::vector<int>> heroPositions;
     std::vector<std::vector<char>> maps;
     std::vector<std::vector<std::shared_ptr<Object>>> objects;
     std::vector<std::vector<std::unique_ptr<Chamber>>> chambers;
 
-    const int height = 25, width = 79;
+    const int height = 25, width = 79, numPotions = 10, numEnemies = 20, numGold = 10;
     int currentFloor = 0;
     std::string message;
 

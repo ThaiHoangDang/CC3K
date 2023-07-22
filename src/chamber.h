@@ -11,6 +11,7 @@ class Chamber {
         Chamber(int x, int y, const std::vector<char> &floorMap, int height, int width);
         ~Chamber();
         bool is_in(int x, int y);
+        std::vector<int> getRandomCell();
 };
 
 #endif
