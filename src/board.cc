@@ -98,6 +98,7 @@ vector<vector<unique_ptr<Chamber>>> createChambers
 }
 
 
+// return random floor cell in a random chamber
 vector<int> getSpawnPlace(vector<unique_ptr<Chamber>> &floorChamber, 
         vector<shared_ptr<Object>> &floorObject, int width) {
     
@@ -206,7 +207,6 @@ int colorCode(const string &color) {
 }
 
 void Board::display() {
-    currentFloor = 4;
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {

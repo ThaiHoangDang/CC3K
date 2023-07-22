@@ -50,8 +50,25 @@ shared_ptr<Object> pickHero() {
     }
 }
 
+// generate seed and write to file
+int seedGenerator() {
+    ofstream os {"data/seeds.txt", std::ios::app};
+
+    if (! os) {
+        cerr << "Cannot find seeds.txt!" << endl;
+        exit(1);
+    }
+
+    int seed = time(NULL);
+
+    os << seed << endl;
+
+    return seed;
+}
+
 // run the game
-void run(const string &map = "default.txt") {
+void run(const string &map, const int seed = seedGenerator()) {
+    srand(seed);
     string input;
 
     // welcome message
@@ -79,12 +96,37 @@ void run(const string &map = "default.txt") {
     // end / replay
 }
 
+// int main(int argc, char *argv[]) {
+//     int seed;
+
+//     if (argc == 1) {
+//         run();
+//     } else {
+//         string arg {argv[1]};
+//         run(arg);
+//     }
+// }
+
 int main(int argc, char *argv[]) {
 
     if (argc == 1) {
-        run();
+        run("default.txt");
     } else {
-        string arg {argv[1]};
-        run(arg);
+        string map, seed;
+        for (int i = 1; i < argc; i++) {
+            string temp = argv[i];
+
+            if ((temp == "-m") && (i != argc - 1)) {
+                i++;
+                map = argv[i];
+            } else if ((temp == "-s") && (i != argc - 1)) {
+                i++;
+                seed = argv[i];
+            }
+        }
+
+        if (map != "" && seed != "") run(map, stoi(seed));
+        else if (map != "") run(map);
+        else if (seed != "") run("default.txt", stoi(seed));
     }
 }
