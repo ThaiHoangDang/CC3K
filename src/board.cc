@@ -28,6 +28,7 @@
 using namespace std;
 
 
+// create object based on label
 shared_ptr<Object> makeObjFromLabel(char c, int x, int y) {
     if (c == '0') return make_shared<RestoreHp>(x, y);
     if (c == '1') return make_shared<BoostAtk>(x, y);
@@ -51,6 +52,7 @@ shared_ptr<Object> makeObjFromLabel(char c, int x, int y) {
 }
 
 
+// detect and create chamber
 vector<vector<unique_ptr<Chamber>>> createChambers
         (const vector<vector<char>> &maps, int height, int width) {
 
@@ -92,6 +94,7 @@ vector<vector<unique_ptr<Chamber>>> createChambers
 }
 
 Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
+    int numObj = 0;
     string line;
     ifstream f {"layout/" + map};
     getline(f, line);
@@ -104,6 +107,7 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
                 if (line.at(j) != '|' && line.at(j) != '-' && 
                         line.at(j) != '#' && line.at(j) != '+' && 
                         line.at(j) != '.' && line.at(j) != ' ') {
+                    numObj++;
                     if (line.at(j) == '@') {
                         floorObj.emplace_back(hero);
                         hero->setX(j);
@@ -111,7 +115,6 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
                     } else {
                         floorObj.emplace_back(makeObjFromLabel(line.at(j), j, i));
                     }
-                    // randome algorithm
                     floorMap.emplace_back('.');
                 } else {
                     floorObj.emplace_back(nullptr);
@@ -125,8 +128,11 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
         maps.emplace_back(floorMap);
     }
 
+    if (numObj == 0) {
+        
+    }
+
     chambers = createChambers(maps, height, width);
-    
 }
 
 Board::~Board() {
@@ -155,15 +161,13 @@ void Board::display() {
         cout << endl;
     }
 
-    string temp1 = "Shade";
-    string temp2 = "100";
-    string temp3 = "1";
-    string firstLine = "Race: " + temp1 + " | " + "Gold: " + temp2;
+    Race *heroPtr = static_cast<Race *>(hero.get());
+    string firstLine = "Race: " + heroPtr->getName() + " | " + "Gold: " + to_string(heroPtr->getValue());
 
     cout << firstLine;
-    cout << setw(79 - firstLine.length()) << right << ("Floor " +  temp3) << endl;
-    cout << "HP: " << 125 << endl;
-    cout << "Atk: " << 25 << endl;
-    cout << "Def: " << 25 << endl;
-    cout << "Action: " << "DMNCN" << endl;
+    cout << setw(79 - firstLine.length()) << right << ("Floor " +  to_string(currentFloor + 1)) << endl;
+    cout << "HP: " << heroPtr->getHp() << endl;
+    cout << "Atk: " << heroPtr->getAtk() << endl;
+    cout << "Def: " << heroPtr->getDef() << endl;
+    cout << "Action: " << message << endl;
 }

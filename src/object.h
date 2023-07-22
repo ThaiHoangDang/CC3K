@@ -14,7 +14,9 @@ class Object {
             const std::string &color, int value, int x, int y);
         ~Object();
         char getlabel();
+        std::string getName();
         std::string getColor();
+        int getValue();
         void setX(int x);
         void setY(int y);
 };

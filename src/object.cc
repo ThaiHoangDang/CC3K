@@ -10,13 +10,13 @@ Object::Object(char label, const string &name, const string &color,
 
 Object::~Object() {}
 
-char Object::getlabel() {
-    return label;
-}
+char Object::getlabel() { return label; }
 
-string Object::getColor() {
-    return color;
-}
+string Object::getName() { return name; }
+
+string Object::getColor() { return color; }
+
+int Object::getValue() { return value; }
 
 void Object::setX(int x) { this->x = x; }
 

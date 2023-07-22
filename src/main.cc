@@ -11,6 +11,7 @@
 using namespace std;
 
 
+// print content of file
 void printFile(const string &file) {
     ifstream f {file};
 
@@ -21,12 +22,15 @@ void printFile(const string &file) {
     }
 }
 
-
+// choose hero based on input
 shared_ptr<Object> pickHero() {
+
+    // display heroes
     printFile("display/heroes.txt");
 
     while (true) {
         string input;
+
         cout << "Enter (Shade/Drow/Vampire/Troll/Goblin):" << endl;
         cin >> input;
 
@@ -46,9 +50,11 @@ shared_ptr<Object> pickHero() {
     }
 }
 
+// run the game
 void run(const string &map = "cc3k-emptySingleFloor.txt") {
     string input;
 
+    // welcome message
     printFile("display/welcome.txt");
 
     while (input != "y") {
@@ -56,13 +62,15 @@ void run(const string &map = "cc3k-emptySingleFloor.txt") {
         cin >> input;
     }
 
+    // hero used in the game
     shared_ptr<Object> hero = pickHero();
 
-    // generate map (Factory Method?)
+    // generate map
     unique_ptr<Board> board = make_unique<Board>(map, hero);
 
+    // game begin message
     printFile("display/begin.txt");
-    // loop
+
     // while (true) {
     board->display();
     // }
