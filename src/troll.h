@@ -8,6 +8,7 @@ class Troll: public Race {
     public:
         Troll(int x, int y);
         ~Troll();
+        virtual void setHp(int h) override;
 };
 
 #endif

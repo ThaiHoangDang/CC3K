@@ -6,10 +6,10 @@
 #include "dragonHoard.h"
 
 class Dragon: public Enemy {
-    std::shared_ptr<DragonHoard> guard;
+    DragonHoard* guard;
 
     public: 
-        Dragon(int x, int y, std::shared_ptr<DragonHoard> guard = nullptr);
+        Dragon(int x, int y, DragonHoard *guard = nullptr);
         ~Dragon();
 };
 

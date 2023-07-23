@@ -8,6 +8,8 @@ class Shade: public Race {
     public:
         Shade(int x, int y);
         ~Shade();
+        virtual void addScore(int x) override;
+        virtual void setHp(int h) override;
 };
 
 #endif

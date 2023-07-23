@@ -88,9 +88,6 @@ vector<vector<unique_ptr<Chamber>>> createChambers
             }
         }
         
-        // test number of chambers
-        // cout << "Number of chambers: " << floorChambers.size() << endl;
-        
         chambers.emplace_back(std::move(floorChambers));
     }
 
@@ -110,6 +107,23 @@ vector<int> getSpawnPlace(vector<unique_ptr<Chamber>> &floorChamber,
             return randomCell;
         }
     }
+}
+
+vector<vector<int>> availableOneRadiusBlock(vector<char> &floorMap, const vector<shared_ptr<Object>> floorObject, 
+        vector<vector<int>> &blocks, int width) {
+    
+    vector<vector<int>> avaiBlocks;
+
+    for (auto i : blocks) {
+        int x = i.at(0);
+        int y = i.at(1);
+
+        if (floorMap.at(y * width + x) == '.' && floorObject.at(y * width + x) == nullptr) {
+            avaiBlocks.emplace_back(vector<int> {x, y});
+        } 
+    }
+
+    return avaiBlocks;
 }
 
 
@@ -180,7 +194,25 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
             generator = make_unique<TreasureGenerator>();
             for (int t = 0; t < numGold; t++) {
                 vector<int> gp = getSpawnPlace(chambers.at(i), objects.at(i), width);
-                objects.at(i).at(gp.at(1) * width + gp.at(0)) = generator->createObject(gp.at(0), gp.at(1));
+                shared_ptr<Object> newObj = generator->createObject(gp.at(0), gp.at(1));
+                objects.at(i).at(gp.at(1) * width + gp.at(0)) = newObj;
+
+                // generate dragon for Dragon Hoard
+                if (newObj->getName() == "Dragon Hoard") {
+                    vector<vector<int>> oneRaidusBlocks = newObj->getOneBlockRadius();
+                    vector<vector<int>> avaiBlocks = availableOneRadiusBlock(maps.at(i), objects.at(i), oneRaidusBlocks, width);
+
+                    // The dragon will not be protected if there is no available blocks for the dragon
+                    if (avaiBlocks.size() != 0) {
+                        int random = rand() % avaiBlocks.size();
+                        int x = avaiBlocks.at(random).at(0);
+                        int y = avaiBlocks.at(random).at(1);
+
+                        DragonHoard *dh = static_cast<DragonHoard *>(newObj.get());
+                        objects.at(i).at(y * width + x) = make_shared<Dragon>(x, y, dh);
+                        dh->setIsGuarded(true);
+                    }
+                }
             }
 
             // enemies spawn
@@ -208,18 +240,33 @@ int colorCode(const string &color) {
 
 void Board::display() {
 
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            if (objects.at(currentFloor).at(i * width + j) != nullptr) {
-                string color = objects.at(currentFloor).at(i * width + j)->getColor();
-                cout << "\033[" << colorCode(color) << "m" << 
-                    objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
-            } else {
-                cout << maps.at(currentFloor).at(i * width + j);
+    for (size_t z = 0; z < maps.size(); z++) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (objects.at(z).at(i * width + j) != nullptr) {
+                    string color = objects.at(z).at(i * width + j)->getColor();
+                    cout << "\033[" << colorCode(color) << "m" << 
+                        objects.at(z).at(i * width + j)->getlabel() << "\033[m";
+                } else {
+                    cout << maps.at(z).at(i * width + j);
+                }
             }
+            cout << endl;
         }
-        cout << endl;
     }
+    
+    // for (int i = 0; i < height; i++) {
+    //     for (int j = 0; j < width; j++) {
+    //         if (objects.at(currentFloor).at(i * width + j) != nullptr) {
+    //             string color = objects.at(currentFloor).at(i * width + j)->getColor();
+    //             cout << "\033[" << colorCode(color) << "m" << 
+    //                 objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
+    //         } else {
+    //             cout << maps.at(currentFloor).at(i * width + j);
+    //         }
+    //     }
+    //     cout << endl;
+    // }
 
     Race *heroPtr = static_cast<Race *>(hero.get());
     string firstLine = "Race: " + heroPtr->getName() + " | " + 

@@ -5,9 +5,10 @@
 #include "object.h"
 
 class Living: public Object {
-    int hp;
-    int atk;
-    int def;
+    protected:
+        int hp;
+        int atk;
+        int def;
 
     public:
         Living(char label, const std::string &name, const std::string &color, 

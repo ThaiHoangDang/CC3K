@@ -92,20 +92,12 @@ void run(const string &map, const int seed = seedGenerator()) {
     board->display();
     // }
 
+    // while (true) {
+        
+    // }
 
     // end / replay
 }
-
-// int main(int argc, char *argv[]) {
-//     int seed;
-
-//     if (argc == 1) {
-//         run();
-//     } else {
-//         string arg {argv[1]};
-//         run(arg);
-//     }
-// }
 
 int main(int argc, char *argv[]) {
 

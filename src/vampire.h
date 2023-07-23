@@ -8,6 +8,7 @@ class Vampire: public Race {
     public:
         Vampire(int x, int y);
         ~Vampire();
+        virtual void setHp(int h) override;
 };
 
 #endif

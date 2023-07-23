@@ -1,6 +1,9 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include <vector>
+#include <string>
+
 class Object {
     char label;
     std::string name;
@@ -15,10 +18,12 @@ class Object {
         ~Object();
 
         bool inOneBlockRadius(const Object *other);
+        std::vector<std::vector<int>> getOneBlockRadius();
         char getlabel();
         std::string getName();
         std::string getColor();
         int getValue();
+        void setValue(int x);
         int getX() const;
         void setX(int x);
         int getY() const;
