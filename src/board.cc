@@ -265,6 +265,7 @@ void Board::moveHero(const string &dir) {
                 if (o->getName() == "Dragon Hoard") {
                     DragonHoard *dhPtr = static_cast<DragonHoard *>(o.get());
                     if (dhPtr->getIsGuarded()) {
+                        message += "Dragon Hoard is guarded";
                         return;
                     }
                 }
@@ -289,11 +290,11 @@ void Board::moveHero(const string &dir) {
             } else {
                 Living *enemyPtr = static_cast<Living *>(o.get());
                 heroPtr->attack(enemyPtr);
-                message = "Player attack " + enemyPtr->getName();
+                message = "Player kill " + enemyPtr->getName();
 
                 if (enemyPtr->getHp() != 0) {
                     message.clear();
-                    message = "player kill " + enemyPtr->getName();
+                    message = "Player attack " + enemyPtr->getName();
                     return;
                 }
             }

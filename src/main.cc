@@ -31,18 +31,20 @@ shared_ptr<Object> pickHero() {
     while (true) {
         string input;
 
-        cout << "Enter (Shade/Drow/Vampire/Troll/Goblin):" << endl;
+        cout << "Hero: ";
         cin >> input;
 
-        if (input == "Shade" || input == "shade") {
+        if (cin.eof()) return nullptr;
+
+        if (input == "Shade" || input == "shade" || input == "s") {
             return make_shared<Shade>(0, 0);
-        } else if (input == "Drow" || input == "drow") {
+        } else if (input == "Drow" || input == "drow" || input == "d") {
             return make_shared<Drow>(0, 0);
-        } else if (input == "Vampire" || input == "vampire") {
+        } else if (input == "Vampire" || input == "vampire" || input == "v") {
             return make_shared<Vampire>(0, 0);
-        } else if (input == "Troll" || input == "troll") {
+        } else if (input == "Troll" || input == "troll" || input == "t") {
             return make_shared<Troll>(0, 0);
-        } else if (input == "Goblin" || input == "goblin") {
+        } else if (input == "Goblin" || input == "goblin" || input == "g") {
             return make_shared<Goblin>(0, 0);
         } else {
             cout << "Cannot find hero!" << endl;
@@ -79,10 +81,13 @@ bool run(const string &map, const int seed = seedGenerator()) {
     while (input != "y") {
         cout << "Start? (y/n)" << endl;
         cin >> input;
+
+        if (cin.eof() || input == "q") return 0;
     }
 
     // pick hero
     shared_ptr<Object> hero = pickHero();
+    if (hero == nullptr) return 0;
 
     // generate map
     unique_ptr<Board> board = make_unique<Board>(map, hero);
@@ -149,18 +154,20 @@ bool run(const string &map, const int seed = seedGenerator()) {
 int main(int argc, char *argv[]) {
 
     if (argc == 1) {
-        while(run("default.txt"));
+        while (run("default.txt"));
+    } else if (argc == 2) {
+        string map = argv[1];
+        while (run(map));
     } else {
         string map, seed;
         for (int i = 1; i < argc; i++) {
             string temp = argv[i];
 
-            if ((temp == "-m") && (i != argc - 1)) {
-                i++;
-                map = argv[i];
-            } else if ((temp == "-s") && (i != argc - 1)) {
+            if ((temp == "-s") && (i != argc - 1)) {
                 i++;
                 seed = argv[i];
+            } else {
+                map = argv[i];
             }
         }
 

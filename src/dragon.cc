@@ -11,4 +11,6 @@ void Dragon::setHp(int h) {
     if (h > 150) hp = 150;
     else if (h < 0) hp = 0;
     else hp = h;
+
+    if (hp == 0) guard->setIsGuarded(false);
 }
