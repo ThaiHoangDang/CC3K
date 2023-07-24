@@ -8,6 +8,7 @@ class Orcs: public Enemy {
     public: 
         Orcs(int x, int y);
         ~Orcs();
+        virtual void setHp(int h) override;
 };
 
 #endif

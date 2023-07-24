@@ -7,3 +7,10 @@ Enemy::Enemy(char label, const std::string &name,
     Living {label, name, "red", value, x, y, hp, atk, def} {}
 
 Enemy::~Enemy() {}
+
+bool Enemy::defence(int damage) {
+    setHp(getHp() - damage);
+    return true;
+}
+
+void Enemy::addOneTurn() { turnCount++; }

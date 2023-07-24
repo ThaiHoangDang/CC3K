@@ -11,6 +11,8 @@ class Race: public Living {
     public:
         Race(const std::string &name, int x, int y, int hp, int atk, int def);
         ~Race();
+        virtual void attack(Living *e);
+        virtual bool defence(int damage) override;
         virtual void addScore(int);
         void resetEffect();
         virtual void addHpEffect(int x);

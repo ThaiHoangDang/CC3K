@@ -7,3 +7,4 @@ DragonHoard::~DragonHoard() {}
 bool DragonHoard::getIsGuarded() { return isGuarded; }
 
 void DragonHoard::setIsGuarded(bool status) { isGuarded = status; }
+

@@ -67,9 +67,11 @@ int seedGenerator() {
 }
 
 // run the game
-void run(const string &map, const int seed = seedGenerator()) {
-    srand(seed);
-    string input;
+bool run(const string &map, const int seed = seedGenerator()) {
+
+    srand(seed); // run seed
+    string input, command;
+    bool enemyTurn = true;
 
     // welcome message
     printFile("display/welcome.txt");
@@ -79,7 +81,7 @@ void run(const string &map, const int seed = seedGenerator()) {
         cin >> input;
     }
 
-    // hero used in the game
+    // pick hero
     shared_ptr<Object> hero = pickHero();
 
     // generate map
@@ -88,13 +90,58 @@ void run(const string &map, const int seed = seedGenerator()) {
     // game begin message
     printFile("display/begin.txt");
 
-    // while (true) {
+    // 
     board->display();
-    // }
 
-    // while (true) {
-        
-    // }
+    while (cin >> command) {
+        if (command == "no") {
+            board->moveHero("no");
+        } else if (command == "so") {
+            board->moveHero("so");
+        } else if (command == "ea") {
+            board->moveHero("ea");
+        } else if (command == "we") {
+            board->moveHero("we");
+        } else if (command == "ne") {
+            board->moveHero("ne");
+        } else if (command == "nw") {
+            board->moveHero("nw");
+        } else if (command == "se") {
+            board->moveHero("se");
+        } else if (command == "sw") {
+            board->moveHero("sw");
+        } else if (command == "u" || command == "a") {
+            cin >> input;
+            if (input == "no" || input == "so" || input == "ea" || input == "we" || 
+                input == "ne" || input == "nw" || input == "se" || input == "sw") {
+                board->moveHero(input);
+            } else {
+                cout << "Invalid direction!" << endl;
+                continue;
+            }
+        } else if (command == "f") {
+            enemyTurn = (enemyTurn == true) ? false : true;
+        } else if (command == "r") {
+            return 1;
+        } else if (command == "q") {
+            return 0;
+        } else {
+            cout << "Invalid command!" << endl;
+            continue;
+        }
+
+        if (enemyTurn) {
+            // enemies turn
+
+            board->addTurn();
+        }
+
+        board->display();
+
+    }
+
+    if (cin.eof()) return 0;
+
 
     // end / replay
 }
@@ -102,7 +149,7 @@ void run(const string &map, const int seed = seedGenerator()) {
 int main(int argc, char *argv[]) {
 
     if (argc == 1) {
-        run("default.txt");
+        while(run("default.txt"));
     } else {
         string map, seed;
         for (int i = 1; i < argc; i++) {
@@ -117,8 +164,8 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        if (map != "" && seed != "") run(map, stoi(seed));
-        else if (map != "") run(map);
-        else if (seed != "") run("default.txt", stoi(seed));
+        if (map != "" && seed != "") while(run(map, stoi(seed)));
+        else if (map != "") while(run(map));
+        else if (seed != "") while(run("default.txt", stoi(seed)));
     }
 }

@@ -8,6 +8,7 @@ class Dwarf: public Enemy {
     public: 
         Dwarf(int x, int y);
         ~Dwarf();
+        virtual void setHp(int h) override;
 };
 
 #endif

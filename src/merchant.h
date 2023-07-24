@@ -9,6 +9,7 @@ class Merchant: public Enemy {
     public: 
         Merchant(int x, int y);
         ~Merchant();
+        virtual void setHp(int h) override;
 };
 
 #endif

@@ -15,12 +15,14 @@ class Board {
     std::vector<std::vector<std::unique_ptr<Chamber>>> chambers;
 
     const int height = 25, width = 79, numPotions = 10, numEnemies = 20, numGold = 10;
-    int currentFloor = 0;
+    int currentFloor = 0, enemiesTurn = 0;
     std::string message;
 
     public:
         Board(const std::string &map, std::shared_ptr<Object> hero);
         ~Board();
+        void addTurn();
+        void moveHero(const std::string &dir);
         void display();
 };
 

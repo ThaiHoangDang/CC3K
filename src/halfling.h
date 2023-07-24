@@ -8,6 +8,7 @@ class Halfling: public Enemy {
     public: 
         Halfling(int x, int y);
         ~Halfling();
+        virtual void setHp(int h) override;
 };
 
 #endif

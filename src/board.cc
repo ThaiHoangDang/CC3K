@@ -231,6 +231,80 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
 
 Board::~Board() {}
 
+void Board::addTurn() { enemiesTurn++; }
+
+vector<int> getNewPosition(Object* obj, const string &dir) {
+    if (dir == "no") return vector<int> {obj->getX(), obj->getY() - 1};
+    if (dir == "so") return vector<int> {obj->getX(), obj->getY() + 1};
+    if (dir == "ea") return vector<int> {obj->getX() + 1, obj->getY()};
+    if (dir == "we") return vector<int> {obj->getX() - 1, obj->getY()};
+    if (dir == "ne") return vector<int> {obj->getX() + 1, obj->getY() - 1};
+    if (dir == "nw") return vector<int> {obj->getX() - 1, obj->getY() - 1};
+    if (dir == "se") return vector<int> {obj->getX() + 1, obj->getY() + 1};
+    return vector<int> {obj->getX() - 1, obj->getY() + 1};
+    
+}
+
+void Board::moveHero(const string &dir) {
+    Race *heroPtr = static_cast<Race *>(hero.get());
+    vector<int> newPosition = getNewPosition(hero.get(), dir);
+    char c = maps.at(currentFloor).at(newPosition.at(0) + newPosition.at(1) * width);
+    if (c == '.' || c == '#' || c == '+') {
+        shared_ptr<Object> o = objects.at(currentFloor).at(newPosition.at(0) + newPosition.at(1) * width);
+
+        if (o != nullptr) {
+            if (o->getlabel() == '\\') {
+                currentFloor++;
+                heroPtr->setX(heroPositions.at(currentFloor).at(0));
+                heroPtr->setY(heroPositions.at(currentFloor).at(1));
+                heroPtr->resetEffect();
+                return;
+
+            } else if (o->getlabel() == 'G') {
+                if (o->getName() == "Dragon Hoard") {
+                    DragonHoard *dhPtr = static_cast<DragonHoard *>(o.get());
+                    if (dhPtr->getIsGuarded()) {
+                        return;
+                    } else {
+                        heroPtr->addScore(o->getValue());
+                    }
+                } else {
+                    heroPtr->addScore(o->getValue());
+                }
+
+            } else if (o->getlabel() == 'P') {
+                if (o->getName() == "Restore HP potion") {
+                    heroPtr->addHpEffect(o->getValue());
+                } else if (o->getName() == "Poison HP potion") {
+                    heroPtr->addHpEffect(-o->getValue());
+                } else if (o->getName() == "Boost Attack potion") {
+                    heroPtr->addAtkEffect(o->getValue());
+                } else if (o->getName() == "Wound Attack potion") {
+                    heroPtr->addAtkEffect(-o->getValue());
+                } else if (o->getName() == "Boost Defence potion") {
+                    heroPtr->addDefEffect(o->getValue());
+                } else if (o->getName() == "Wound Defence potion") {
+                    heroPtr->addDefEffect(-o->getValue());
+                }
+
+            } else {
+                Living *enemyPtr = static_cast<Living *>(o.get());
+                heroPtr->attack(enemyPtr);
+
+                if (enemyPtr->getHp() != 0) {
+                    return;
+                }
+            }
+        }
+
+        objects.at(currentFloor).at(newPosition.at(0) + newPosition.at(1) * width) = hero;
+        objects.at(currentFloor).at(hero->getX() + hero->getY() * width) = nullptr;
+        heroPtr->setX(newPosition.at(0));
+        heroPtr->setY(newPosition.at(1));
+    }
+}
+
+
 int colorCode(const string &color) {
     if (color == "blue") return 36;
     if (color == "yellow") return 33;
@@ -240,33 +314,33 @@ int colorCode(const string &color) {
 
 void Board::display() {
 
-    for (size_t z = 0; z < maps.size(); z++) {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (objects.at(z).at(i * width + j) != nullptr) {
-                    string color = objects.at(z).at(i * width + j)->getColor();
-                    cout << "\033[" << colorCode(color) << "m" << 
-                        objects.at(z).at(i * width + j)->getlabel() << "\033[m";
-                } else {
-                    cout << maps.at(z).at(i * width + j);
-                }
-            }
-            cout << endl;
-        }
-    }
-    
-    // for (int i = 0; i < height; i++) {
-    //     for (int j = 0; j < width; j++) {
-    //         if (objects.at(currentFloor).at(i * width + j) != nullptr) {
-    //             string color = objects.at(currentFloor).at(i * width + j)->getColor();
-    //             cout << "\033[" << colorCode(color) << "m" << 
-    //                 objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
-    //         } else {
-    //             cout << maps.at(currentFloor).at(i * width + j);
+    // for (size_t z = 0; z < maps.size(); z++) {
+    //     for (int i = 0; i < height; i++) {
+    //         for (int j = 0; j < width; j++) {
+    //             if (objects.at(z).at(i * width + j) != nullptr) {
+    //                 string color = objects.at(z).at(i * width + j)->getColor();
+    //                 cout << "\033[" << colorCode(color) << "m" << 
+    //                     objects.at(z).at(i * width + j)->getlabel() << "\033[m";
+    //             } else {
+    //                 cout << maps.at(z).at(i * width + j);
+    //             }
     //         }
+    //         cout << endl;
     //     }
-    //     cout << endl;
     // }
+    
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            if (objects.at(currentFloor).at(i * width + j) != nullptr) {
+                string color = objects.at(currentFloor).at(i * width + j)->getColor();
+                cout << "\033[" << colorCode(color) << "m" << 
+                    objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
+            } else {
+                cout << maps.at(currentFloor).at(i * width + j);
+            }
+        }
+        cout << endl;
+    }
 
     Race *heroPtr = static_cast<Race *>(hero.get());
     string firstLine = "Race: " + heroPtr->getName() + " | " + 
@@ -276,7 +350,7 @@ void Board::display() {
     cout << setw(79 - firstLine.length()) << right << ("Floor " +  
         to_string(currentFloor + 1)) << endl;
     cout << "HP: " << heroPtr->getHp() << endl;
-    cout << "Atk: " << heroPtr->getAtk() << endl;
-    cout << "Def: " << heroPtr->getDef() << endl;
+    cout << "Atk: " << heroPtr->getTotalAtk() << endl;
+    cout << "Def: " << heroPtr->getTotalDef() << endl;
     cout << "Action: " << message << endl;
 }

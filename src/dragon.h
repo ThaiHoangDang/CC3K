@@ -11,6 +11,7 @@ class Dragon: public Enemy {
     public: 
         Dragon(int x, int y, DragonHoard *guard = nullptr);
         ~Dragon();
+        virtual void setHp(int h) override;
 };
 
 #endif
