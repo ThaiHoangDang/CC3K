@@ -258,6 +258,7 @@ void Board::moveHero(const string &dir) {
                 heroPtr->setX(heroPositions.at(currentFloor).at(0));
                 heroPtr->setY(heroPositions.at(currentFloor).at(1));
                 heroPtr->resetEffect();
+                message = "Player get to floor " + to_string(currentFloor + 1);
                 return;
 
             } else if (o->getlabel() == 'G') {
@@ -265,12 +266,10 @@ void Board::moveHero(const string &dir) {
                     DragonHoard *dhPtr = static_cast<DragonHoard *>(o.get());
                     if (dhPtr->getIsGuarded()) {
                         return;
-                    } else {
-                        heroPtr->addScore(o->getValue());
                     }
-                } else {
-                    heroPtr->addScore(o->getValue());
                 }
+                heroPtr->addScore(o->getValue());
+                message = "Player get " + to_string(o->getValue()) + " gold";
 
             } else if (o->getlabel() == 'P') {
                 if (o->getName() == "Restore HP potion") {
@@ -286,12 +285,15 @@ void Board::moveHero(const string &dir) {
                 } else if (o->getName() == "Wound Defence potion") {
                     heroPtr->addDefEffect(-o->getValue());
                 }
-
+                message = "Player use " + o->getName();
             } else {
                 Living *enemyPtr = static_cast<Living *>(o.get());
                 heroPtr->attack(enemyPtr);
+                message = "Player attack " + enemyPtr->getName();
 
                 if (enemyPtr->getHp() != 0) {
+                    message.clear();
+                    message = "player kill " + enemyPtr->getName();
                     return;
                 }
             }
@@ -353,4 +355,6 @@ void Board::display() {
     cout << "Atk: " << heroPtr->getTotalAtk() << endl;
     cout << "Def: " << heroPtr->getTotalDef() << endl;
     cout << "Action: " << message << endl;
+
+    message.clear();
 }

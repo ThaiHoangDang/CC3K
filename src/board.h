@@ -16,7 +16,7 @@ class Board {
 
     const int height = 25, width = 79, numPotions = 10, numEnemies = 20, numGold = 10;
     int currentFloor = 0, enemiesTurn = 0;
-    std::string message;
+    std::string message = "Player Character has been spawned";
 
     public:
         Board(const std::string &map, std::shared_ptr<Object> hero);
