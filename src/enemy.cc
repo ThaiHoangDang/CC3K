@@ -11,7 +11,7 @@ Enemy::Enemy(char label, const std::string &name,
 Enemy::~Enemy() {}
 
 int Enemy::attack(Living *l) {
-    int damage = ceil((100.0/(100 + l->getDef()))) * getAtk();
+    int damage = ceil((100.0/(100 + l->getDef())) * getAtk());
     if (l->defence(damage)) return damage;
     return 0;
 }

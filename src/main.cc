@@ -117,6 +117,12 @@ bool end(Race *hero, string status) {
 // run the game
 bool run(const string &map, const int seed = seedGenerator()) {
 
+    ifstream testMap {"layout/" + map};
+    if (! testMap.is_open()) {
+        cout << "Cannot find map!" << endl;
+        return 0;
+    }
+
     srand(seed); // run seed
     string input, command;
     bool enemyTurn = true;
