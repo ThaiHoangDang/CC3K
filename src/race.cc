@@ -8,15 +8,24 @@ Race::Race(const std::string &name, int x, int y, int hp, int atk, int def):
 
 Race::~Race() {}
 
-void Race::attack(Living *e) {
-    int damage = ceil((100.0/(100 + e->getDef()))) * getTotalAtk();
+int Race::attack(Living *e) {
+    int damage = ceil((100.0/(100 + e->getDef())) * getTotalAtk());
     if (e->defence(damage)) {
         if (e->getHp() == 0) { addScore(e->getValue()); }
+        return damage;
     }
+    return 0;
 }
 
 bool Race::defence(int damage) {
 
+    // 50% chance race dodge enemies attack
+    if (rand() % 2 == 0) {
+        setHp(getHp() - damage);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void Race::addScore(int x) { setValue(getValue() + x); }

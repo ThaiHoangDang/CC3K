@@ -22,9 +22,11 @@ class Board {
         Board(const std::string &map, std::shared_ptr<Object> hero);
         ~Board();
         void addTurn();
+        void resetTurn();
         int getCurFloor();
         int getNumFloor();
         void moveHero(const std::string &dir);
+        void moveEnemies();
         void display();
 };
 

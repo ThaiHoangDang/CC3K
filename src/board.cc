@@ -109,6 +109,7 @@ vector<int> getSpawnPlace(vector<unique_ptr<Chamber>> &floorChamber,
     }
 }
 
+// 
 vector<vector<int>> availableOneRadiusBlock(vector<char> &floorMap, const vector<shared_ptr<Object>> floorObject, 
         vector<vector<int>> &blocks, int width) {
     
@@ -202,7 +203,7 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
                     vector<vector<int>> oneRaidusBlocks = newObj->getOneBlockRadius();
                     vector<vector<int>> avaiBlocks = availableOneRadiusBlock(maps.at(i), objects.at(i), oneRaidusBlocks, width);
 
-                    // The dragon will not be protected if there is no available blocks for the dragon
+                    // The dragon hoard will not be protected if there is no available blocks for the dragon
                     if (avaiBlocks.size() != 0) {
                         int random = rand() % avaiBlocks.size();
                         int x = avaiBlocks.at(random).at(0);
@@ -232,6 +233,8 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
 Board::~Board() {}
 
 void Board::addTurn() { enemiesTurn++; }
+
+void Board::resetTurn() { enemiesTurn = 0; }
 
 int Board::getCurFloor() {
     return currentFloor;
@@ -267,7 +270,8 @@ void Board::moveHero(const string &dir) {
                     heroPtr->setX(heroPositions.at(currentFloor).at(0));
                     heroPtr->setY(heroPositions.at(currentFloor).at(1));
                     heroPtr->resetEffect();
-                    message += "Player get to floor " + to_string(currentFloor + 1);
+                    resetTurn();
+                    message += "Player gets to floor " + to_string(currentFloor + 1) + ". ";
                 }
                 return;
 
@@ -275,12 +279,12 @@ void Board::moveHero(const string &dir) {
                 if (o->getName() == "Dragon Hoard") {
                     DragonHoard *dhPtr = static_cast<DragonHoard *>(o.get());
                     if (dhPtr->getIsGuarded()) {
-                        message += "Dragon Hoard is guarded";
+                        message += "Dragon Hoard is guarded. ";
                         return;
                     }
                 }
                 heroPtr->addScore(o->getValue());
-                message += "Player get " + to_string(o->getValue()) + " gold";
+                message += "Player gets " + to_string(o->getValue()) + " gold. ";
 
             } else if (o->getlabel() == 'P') {
                 if (o->getName() == "Restore HP potion") {
@@ -296,15 +300,18 @@ void Board::moveHero(const string &dir) {
                 } else if (o->getName() == "Wound Defence potion") {
                     heroPtr->addDefEffect(-o->getValue());
                 }
-                message += "Player use " + o->getName();
+                message += "Player uses " + o->getName() + ". ";
             } else {
                 Living *enemyPtr = static_cast<Living *>(o.get());
-                heroPtr->attack(enemyPtr);
-                message += "Player kill " + enemyPtr->getName();
+                int damage = heroPtr->attack(enemyPtr);
+                message += "Player kills " + enemyPtr->getName() + " and gets " + 
+                    to_string((hero->getName() != "Goblin") ? enemyPtr->getValue() : 
+                    enemyPtr->getValue() + 5) + " gold. ";
 
                 if (enemyPtr->getHp() != 0) {
                     message.clear();
-                    message += "Player attack " + enemyPtr->getName();
+                    message += "Player deals " + to_string(damage) + " damage to " + 
+                        enemyPtr->getName() + " (" + to_string(enemyPtr->getHp()) + " HP). ";
                     return;
                 }
             }
@@ -314,6 +321,39 @@ void Board::moveHero(const string &dir) {
         objects.at(currentFloor).at(hero->getX() + hero->getY() * width) = nullptr;
         heroPtr->setX(newPosition.at(0));
         heroPtr->setY(newPosition.at(1));
+    }
+}
+
+void Board::moveEnemies() {
+
+    for (auto i : objects.at(currentFloor)) {
+        Object *objPtr = i.get();
+        Enemy *enemyPtr = dynamic_cast<Enemy *>(objPtr);
+
+        if (enemyPtr != nullptr && enemyPtr->getTurn() == enemiesTurn) {
+
+            if (enemyPtr->inOneBlockRadius(hero.get())) {
+                Living *l = static_cast<Living *>(hero.get());
+                message += enemyPtr->getName() + " deals " + to_string(enemyPtr->attack(l)) + " to PC. ";
+            } else {
+                vector<vector<int>> oneRaidusBlocks = enemyPtr->getOneBlockRadius();
+                vector<vector<int>> avaiBlocks = availableOneRadiusBlock
+                    (maps.at(currentFloor), objects.at(currentFloor), oneRaidusBlocks, width);
+
+                if (avaiBlocks.size() != 0) {
+                    int random = rand() % avaiBlocks.size();
+                    int x = avaiBlocks.at(random).at(0);
+                    int y = avaiBlocks.at(random).at(1);
+
+                    objects.at(currentFloor).at(x + y * width) = i;
+                    objects.at(currentFloor).at(enemyPtr->getX() + enemyPtr->getY() * width) = nullptr;
+                    enemyPtr->setX(x);
+                    enemyPtr->setY(y);
+                }
+                
+            }
+            enemyPtr->addOneTurn();
+        }
     }
 }
 

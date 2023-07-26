@@ -69,12 +69,17 @@ int seedGenerator() {
     return seed;
 }
 
-bool win(Race *hero) {
+bool end(Race *hero, string status) {
     const int space = 44;
     string input;
 
-    // display win message
-    printFile("display/win.txt");
+    if (status == "win") {
+        // display win message
+        printFile("display/win.txt");
+    } else if (status == "lose") {
+        // display lose message
+        printFile("display/lose.txt");  
+    }
 
     while (input != "y") {
         cout << "Get stat? (y)" << endl;
@@ -107,13 +112,6 @@ bool win(Race *hero) {
     } else {
         return 0;
     }
-}
-
-bool lose(Race *) {
-    // display lose message
-    printFile("display/lose.txt");
-
-
 }
 
 // run the game
@@ -186,19 +184,19 @@ bool run(const string &map, const int seed = seedGenerator()) {
 
         // hero wins
         if (board->getCurFloor() == board->getNumFloor()) {
-            return win(heroPtr);
+            return end(heroPtr, "win");
         }
 
         // run enemies turn
         if (enemyTurn) {
             // enemies turn
-
+            board->moveEnemies();
             board->addTurn(); // keep track of enemies turn
         }
 
         // hero dies
         if (heroPtr->getHp() <= 0) {
-            return lose(heroPtr);
+            return end(heroPtr, "lose");
         }
 
         board->display();

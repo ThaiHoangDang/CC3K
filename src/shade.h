@@ -9,7 +9,7 @@ class Shade: public Race {
         Shade(int x, int y);
         ~Shade();
         virtual void setHp(int h) override;
-        virtual int getValue() override;
+        virtual void addScore(int x) override;
 };
 
 #endif

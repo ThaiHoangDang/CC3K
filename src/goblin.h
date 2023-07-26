@@ -9,7 +9,7 @@ class Goblin: public Race {
         Goblin(int x, int y);
         ~Goblin();
         virtual void setHp(int h) override;
-        virtual void attack(Living *e);
+        virtual int attack(Living *e);
 };
 
 #endif

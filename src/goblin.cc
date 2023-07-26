@@ -11,9 +11,12 @@ void Goblin::setHp(int h) {
     else hp = h; 
 }
 
-void Goblin::attack(Living *e) {
-    int damage = ceil((100.0/(100 + e->getDef()))) * getTotalAtk();
+int Goblin::attack(Living *e) {
+    int damage = ceil((100.0/(100 + e->getDef())) * getTotalAtk());
     if (e->defence(damage)) {
         if (e->getHp() == 0) { addScore(e->getValue() + 5); }
+        return damage;
     }
+    return 0;
+
 }

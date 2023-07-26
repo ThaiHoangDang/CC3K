@@ -9,7 +9,7 @@ class Vampire: public Race {
         Vampire(int x, int y);
         ~Vampire();
         virtual void setHp(int h) override;
-        virtual void attack(Living *e);
+        virtual int attack(Living *e);
 };
 
 #endif

@@ -10,10 +10,12 @@ void Vampire::setHp(int h) {
     else hp = h;
 }
 
-void Vampire::attack(Living *e) {
-    int damage = ceil((100.0/(100 + e->getDef()))) * getTotalAtk();
+int Vampire::attack(Living *e) {
+    int damage = ceil((100.0/(100 + e->getDef())) * getTotalAtk());
     if (e->defence(damage)) {
         setHp(getHp() + 5);
         if (e->getHp() == 0) { addScore(e->getValue()); }
+        return damage;
     }
+    return 0;
 }

@@ -10,6 +10,4 @@ void Shade::setHp(int h) {
     else hp = h;
 }
 
-int Shade::getValue() {
-    return value * 2;
-}
+void Shade::addScore(int x) { setValue(getValue() + x * 2); }
