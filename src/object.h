@@ -19,7 +19,7 @@ class Object {
             const std::string &color, int value, int x, int y);
         ~Object();
 
-        bool inOneBlockRadius(const Object *other);
+        virtual bool inOneBlockRadius(const Object *other);
         std::vector<std::vector<int>> getOneBlockRadius();
         char getlabel();
         std::string getName();

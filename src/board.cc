@@ -363,6 +363,7 @@ void Board::moveHero(const string &dir) {
                     heroPtr->addDefEffect(-o->getValue());
                 }
                 message += "Player uses " + o->getName() + ". ";
+
             } else {
                 Living *enemyPtr = static_cast<Living *>(o.get());
                 int damage = heroPtr->attack(enemyPtr);
@@ -393,11 +394,11 @@ void Board::moveEnemies() {
         Enemy *enemyPtr = dynamic_cast<Enemy *>(objPtr);
 
         if (enemyPtr != nullptr && enemyPtr->getTurn() == enemiesTurn) {
-
+            
             if (enemyPtr->inOneBlockRadius(hero.get())) {
                 Living *l = static_cast<Living *>(hero.get());
                 message += enemyPtr->getName() + " deals " + to_string(enemyPtr->attack(l)) + " to PC. ";
-            } else {
+            } else if (enemyPtr->getName() != "Dragon") {
                 vector<vector<int>> oneRaidusBlocks = enemyPtr->getOneBlockRadius();
                 vector<vector<int>> avaiBlocks = availableOneRadiusBlock
                     (maps.at(currentFloor), objects.at(currentFloor), oneRaidusBlocks, width);
@@ -412,7 +413,6 @@ void Board::moveEnemies() {
                     enemyPtr->setX(x);
                     enemyPtr->setY(y);
                 }
-                
             }
             enemyPtr->addOneTurn();
         }

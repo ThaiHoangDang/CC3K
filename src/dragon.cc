@@ -15,4 +15,11 @@ void Dragon::setHp(int h) {
     if (hp == 0) guard->setIsGuarded(false);
 }
 
+bool Dragon::inOneBlockRadius(const Object *other) {
+    if (other == nullptr) return false;
+    return (((other->getX() >= getX() - 1) && (other->getX() <= getX() + 1) && 
+        (other->getY() >= getY() - 1) && (other->getY() <= getY() + 1))) || 
+        guard->inOneBlockRadius(other);
+}
+
 void Dragon::setGuard(DragonHoard* g) { guard = g; }
