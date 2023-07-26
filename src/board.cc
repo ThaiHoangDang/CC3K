@@ -109,8 +109,9 @@ vector<int> getSpawnPlace(vector<unique_ptr<Chamber>> &floorChamber,
     }
 }
 
-// 
-vector<vector<int>> availableOneRadiusBlock(vector<char> &floorMap, const vector<shared_ptr<Object>> floorObject, 
+// return a vector of available blocks to move to
+vector<vector<int>> availableOneRadiusBlock(vector<char> &floorMap, 
+        const vector<shared_ptr<Object>> &floorObject, 
         vector<vector<int>> &blocks, int width) {
     
     vector<vector<int>> avaiBlocks;
@@ -125,6 +126,61 @@ vector<vector<int>> availableOneRadiusBlock(vector<char> &floorMap, const vector
     }
 
     return avaiBlocks;
+}
+
+// return the first valid combination of Dragon and Dragon Hoard
+vector<vector<Object *>> DragonAndHoardCombine(vector<Object *> &dragons, vector<Object *> &dragonHoards) {
+    std::vector<std::vector<Object *>> combination;
+    
+    for (size_t i = 0; i < dragons.size(); ++i) {
+        for (size_t j = 0; j < dragonHoards.size(); ++j) {
+            bool valid_combination = true;
+            combination.clear();
+            for (size_t k = 0; k < dragons.size(); ++k) {
+                Object *a = dragons[(i + k) % dragons.size()];
+                Object *b = dragonHoards[(j + k) % dragonHoards.size()];
+                if (! a->inOneBlockRadius(b)) {
+                    valid_combination = false;
+                    break;
+                }
+                std::vector<Object *> pair = {a, b};
+                combination.push_back(pair);
+            }
+            if (valid_combination) {
+                return combination;
+            }
+        }
+    }
+
+    return combination;
+}
+
+// link Dragon and Dragon Hoard together
+void linkDragonAndHoard(vector<vector<shared_ptr<Object>>> &objects) {
+
+    for (auto floor : objects) {
+        vector<Object *> dragons;
+        vector<Object *> dragonHoards;
+        
+        for (auto obj : floor) {
+            if (obj != nullptr && obj->getName() == "Dragon") {
+                dragons.push_back(obj.get());
+            } else if (obj != nullptr && obj->getName() == "Dragon Hoard") {
+                dragonHoards.push_back(obj.get());
+            }
+        }
+
+        vector<vector<Object *>> combination = DragonAndHoardCombine(dragons, dragonHoards);
+
+        for (auto pair : combination) {
+            Dragon *dragonPtr = static_cast<Dragon *>(pair.at(0));
+            DragonHoard *dragonHoardPtr = static_cast<DragonHoard *>(pair.at(1));
+
+            dragonPtr->setGuard(dragonHoardPtr);
+            dragonHoardPtr->setIsGuarded(true);
+        }
+
+    }
 }
 
 
@@ -163,8 +219,13 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
         maps.emplace_back(floorMap);
     }
 
+
     // use algorithm to detect and create chambers
     chambers = createChambers(maps, height, width);
+
+    // link dragons and dragon hoards together
+    linkDragonAndHoard(objects);
+
 
     // generate objects if input map is empty
     if (numObj == 0) {
@@ -261,7 +322,8 @@ void Board::moveHero(const string &dir) {
     vector<int> newPosition = getNewPosition(hero.get(), dir);
     char c = maps.at(currentFloor).at(newPosition.at(0) + newPosition.at(1) * width);
     if (c == '.' || c == '#' || c == '+') {
-        shared_ptr<Object> o = objects.at(currentFloor).at(newPosition.at(0) + newPosition.at(1) * width);
+        shared_ptr<Object> o = objects.at(currentFloor).at(newPosition.at(0) + 
+                newPosition.at(1) * width);
 
         if (o != nullptr) {
             if (o->getlabel() == '\\') {

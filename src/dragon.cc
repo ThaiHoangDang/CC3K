@@ -14,3 +14,5 @@ void Dragon::setHp(int h) {
 
     if (hp == 0) guard->setIsGuarded(false);
 }
+
+void Dragon::setGuard(DragonHoard* g) { guard = g; }
