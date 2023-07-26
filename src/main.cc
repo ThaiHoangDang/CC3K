@@ -1,6 +1,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include "board.h"
 #include "shade.h"
 #include "drow.h"
@@ -68,6 +69,53 @@ int seedGenerator() {
     return seed;
 }
 
+bool win(Race *hero) {
+    const int space = 44;
+    string input;
+
+    // display win message
+    printFile("display/win.txt");
+
+    while (input != "y") {
+        cout << "Get stat? (y)" << endl;
+        cin >> input;
+
+        if (cin.eof() || input == "q") return 0;
+    }
+
+    cout << setw(space) << "\033[" + to_string(33) + "m" + "Score: " 
+            << hero->getValue() << "\033[m" << endl;
+    cout << setw(space) << "\033[" + to_string(36) + "m" + "Race: " 
+            << hero->getName() << "\033[m" << endl;
+    cout << setw(space) << "\033[" + to_string(31) + "m" + "HP: " 
+            << hero->getHp() << "\033[m" << endl;
+    cout << setw(space) << "\033[" + to_string(31) + "m" + "Atk: " 
+            << hero->getTotalAtk() << "\033[m" << endl;
+    cout << setw(space) << "\033[" + to_string(31) + "m" + "Def: " 
+            << hero->getTotalDef() << "\033[m" << endl << endl << endl;
+
+    input = "";
+    while (input != "y" && input != "n") {
+        cout << "Play again? (y/n)" << endl;
+        cin >> input;
+
+        if (cin.eof() || input == "q") return 0;
+    }
+
+    if (input == "y") {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+bool lose(Race *) {
+    // display lose message
+    printFile("display/lose.txt");
+
+
+}
+
 // run the game
 bool run(const string &map, const int seed = seedGenerator()) {
 
@@ -88,6 +136,7 @@ bool run(const string &map, const int seed = seedGenerator()) {
     // pick hero
     shared_ptr<Object> hero = pickHero();
     if (hero == nullptr) return 0;
+    Race *heroPtr = static_cast<Race *>(hero.get());
 
     // generate map
     unique_ptr<Board> board = make_unique<Board>(map, hero);
@@ -95,7 +144,7 @@ bool run(const string &map, const int seed = seedGenerator()) {
     // game begin message
     printFile("display/begin.txt");
 
-    // 
+    // display initial board
     board->display();
 
     while (cin >> command) {
@@ -135,20 +184,28 @@ bool run(const string &map, const int seed = seedGenerator()) {
             continue;
         }
 
+        // hero wins
+        if (board->getCurFloor() == board->getNumFloor()) {
+            return win(heroPtr);
+        }
+
+        // run enemies turn
         if (enemyTurn) {
             // enemies turn
 
-            board->addTurn();
+            board->addTurn(); // keep track of enemies turn
+        }
+
+        // hero dies
+        if (heroPtr->getHp() <= 0) {
+            return lose(heroPtr);
         }
 
         board->display();
 
     }
 
-    if (cin.eof()) return 0;
-
-
-    // end / replay
+    return 0;
 }
 
 int main(int argc, char *argv[]) {

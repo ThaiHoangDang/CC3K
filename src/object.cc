@@ -7,7 +7,7 @@ using namespace std;
 
 Object::Object(char label, const string &name, const string &color, 
     int value, int x, int y): label {label}, name {name}, color {color},
-    value {value}, x {x}, y {y} {}
+    x {x}, y {y}, value {value} {}
 
 Object::~Object() {}
 

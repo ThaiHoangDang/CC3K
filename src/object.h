@@ -8,9 +8,11 @@ class Object {
     char label;
     std::string name;
     std::string color;
-    int value;
     int x;
     int y;
+
+    protected:
+        int value;
 
     public:
         Object(char label, const std::string &name, 
@@ -22,7 +24,7 @@ class Object {
         char getlabel();
         std::string getName();
         std::string getColor();
-        int getValue();
+        virtual int getValue();
         void setValue(int x);
         int getX() const;
         void setX(int x);

@@ -233,6 +233,14 @@ Board::~Board() {}
 
 void Board::addTurn() { enemiesTurn++; }
 
+int Board::getCurFloor() {
+    return currentFloor;
+}
+
+int Board::getNumFloor() {
+    return maps.size();
+}
+
 vector<int> getNewPosition(Object* obj, const string &dir) {
     if (dir == "no") return vector<int> {obj->getX(), obj->getY() - 1};
     if (dir == "so") return vector<int> {obj->getX(), obj->getY() + 1};
@@ -255,10 +263,12 @@ void Board::moveHero(const string &dir) {
         if (o != nullptr) {
             if (o->getlabel() == '\\') {
                 currentFloor++;
-                heroPtr->setX(heroPositions.at(currentFloor).at(0));
-                heroPtr->setY(heroPositions.at(currentFloor).at(1));
-                heroPtr->resetEffect();
-                message = "Player get to floor " + to_string(currentFloor + 1);
+                if (currentFloor != maps.size()) {
+                    heroPtr->setX(heroPositions.at(currentFloor).at(0));
+                    heroPtr->setY(heroPositions.at(currentFloor).at(1));
+                    heroPtr->resetEffect();
+                    message += "Player get to floor " + to_string(currentFloor + 1);
+                }
                 return;
 
             } else if (o->getlabel() == 'G') {
@@ -270,7 +280,7 @@ void Board::moveHero(const string &dir) {
                     }
                 }
                 heroPtr->addScore(o->getValue());
-                message = "Player get " + to_string(o->getValue()) + " gold";
+                message += "Player get " + to_string(o->getValue()) + " gold";
 
             } else if (o->getlabel() == 'P') {
                 if (o->getName() == "Restore HP potion") {
@@ -286,15 +296,15 @@ void Board::moveHero(const string &dir) {
                 } else if (o->getName() == "Wound Defence potion") {
                     heroPtr->addDefEffect(-o->getValue());
                 }
-                message = "Player use " + o->getName();
+                message += "Player use " + o->getName();
             } else {
                 Living *enemyPtr = static_cast<Living *>(o.get());
                 heroPtr->attack(enemyPtr);
-                message = "Player kill " + enemyPtr->getName();
+                message += "Player kill " + enemyPtr->getName();
 
                 if (enemyPtr->getHp() != 0) {
                     message.clear();
-                    message = "Player attack " + enemyPtr->getName();
+                    message += "Player attack " + enemyPtr->getName();
                     return;
                 }
             }
@@ -346,8 +356,9 @@ void Board::display() {
     }
 
     Race *heroPtr = static_cast<Race *>(hero.get());
+    int score = (heroPtr->getName() == "Shade") ? heroPtr->getValue() / 2 : heroPtr->getValue();
     string firstLine = "Race: " + heroPtr->getName() + " | " + 
-        "Gold: " + to_string(heroPtr->getValue());
+        "Gold: " + to_string(score);
 
     cout << firstLine;
     cout << setw(79 - firstLine.length()) << right << ("Floor " +  
