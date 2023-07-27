@@ -1,7 +1,9 @@
 #include <cmath>
 #include "vampire.h"
 
-Vampire::Vampire(int x, int y): Race {"Vampire", x, y, 50, 25, 25} {}
+const int defaultHP = 50, defaultAtk = 25, defaultDef = 25;
+
+Vampire::Vampire(int x, int y): Race {"Vampire", x, y, defaultHP, defaultAtk, defaultDef} {}
 
 Vampire::~Vampire() {}
 

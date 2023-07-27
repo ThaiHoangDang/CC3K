@@ -1,11 +1,13 @@
 #include "troll.h"
 
-Troll::Troll(int x, int y): Race {"Troll", x, y, 120, 25, 15} {}
+const int defaultHP = 120, defaultAtk = 25, defaultDef = 15;
+
+Troll::Troll(int x, int y): Race {"Troll", x, y, defaultHP, defaultAtk, defaultDef} {}
 
 Troll::~Troll() {}
 
 void Troll::setHp(int h) {
-    if (h > 120) hp = 120;
+    if (h > defaultHP) hp = defaultHP;
     else if (h < 0) hp = 0;
     else hp = h;
 }

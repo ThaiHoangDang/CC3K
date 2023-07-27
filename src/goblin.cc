@@ -1,12 +1,14 @@
 #include <cmath>
 #include "goblin.h"
 
-Goblin::Goblin(int x, int y): Race {"Goblin", x, y, 110, 15, 20} {}
+const int defaultHP = 110, defaultAtk = 15, defaultDef = 20;
+
+Goblin::Goblin(int x, int y): Race {"Goblin", x, y, defaultHP, defaultAtk, defaultDef} {}
 
 Goblin::~Goblin() {}
 
 void Goblin::setHp(int h) {
-    if (h > 110) hp = 110;
+    if (h > defaultHP) hp = defaultHP;
     else if (h < 0) hp = 0;
     else hp = h; 
 }

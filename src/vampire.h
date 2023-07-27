@@ -4,7 +4,7 @@
 #include "race.h"
 
 class Vampire: public Race {
-    
+
     public:
         Vampire(int x, int y);
         ~Vampire();

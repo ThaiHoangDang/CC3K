@@ -2,13 +2,15 @@
 
 using namespace std;
 
+const int defaultHP = 150, defaultAtk = 20, defaultDef = 20;
+
 Dragon::Dragon(int x, int y, DragonHoard *guard): 
-    Enemy {'D', "Dragon", 0, x, y, 150, 20, 20}, guard {guard} {}
+    Enemy {'D', "Dragon", 0, x, y, defaultHP, defaultAtk, defaultDef}, guard {guard} {}
 
 Dragon::~Dragon() {}
 
 void Dragon::setHp(int h) {
-    if (h > 150) hp = 150;
+    if (h > defaultHP) hp = defaultHP;
     else if (h < 0) hp = 0;
     else hp = h;
 

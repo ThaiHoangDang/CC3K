@@ -1,12 +1,15 @@
 #include <cstdlib>
 #include "merchant.h"
 
-Merchant::Merchant(int x, int y): Enemy {'M', "Merchant", 4, x, y, 30, 70, 5} {}
+const int defaultHP = 30, defaultAtk = 70, defaultDef = 5;
+
+Merchant::Merchant(int x, int y): 
+    Enemy {'M', "Merchant", 4, x, y, defaultHP, defaultAtk, defaultDef} {}
 
 Merchant::~Merchant() {}
 
 void Merchant::setHp(int h) {
-    if (h > 30) hp = 30;
+    if (h > defaultHP) hp = defaultHP;
     else if (h < 0) hp = 0;
     else hp = h;
 }

@@ -1,11 +1,13 @@
 #include "drow.h"
 
-Drow::Drow(int x, int y): Race {"Drow", x, y, 150, 25, 15} {}
+const int defaultHP = 150, defaultAtk = 25, defaultDef = 15;
+
+Drow::Drow(int x, int y): Race {"Drow", x, y, defaultHP, defaultAtk, defaultDef} {}
 
 Drow::~Drow() {}
 
 void Drow::setHp(int h) {
-    if (h > 150) hp = 150;
+    if (h > defaultHP) hp = defaultHP;
     else if (h < 0) hp = 0;
     else hp = h;
 }
