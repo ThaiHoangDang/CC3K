@@ -9,6 +9,8 @@ class PoisonHp: public Potion {
     public:
         PoisonHp(int x, int y);
         ~PoisonHp();
+        virtual std::string getName() override;
+        virtual void setUnknown(bool status) override;
 };
 
 #endif

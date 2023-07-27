@@ -294,7 +294,20 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
 Board::~Board() {
     unique_ptr<Merchant> merchant = make_unique<Merchant>(0, 0);
     merchant->setIsHostile(false);
-    
+
+    unique_ptr<Potion> potion = make_unique<RestoreHp> (0, 0);
+    potion->setUnknown(true); 
+    potion = make_unique<BoostAtk> (0, 0);
+    potion->setUnknown(true); 
+    potion = make_unique<BoostDef> (0, 0);
+    potion->setUnknown(true); 
+    potion = make_unique<PoisonHp> (0, 0);
+    potion->setUnknown(true); 
+    potion = make_unique<WoundAtk> (0, 0);
+    potion->setUnknown(true); 
+    potion = make_unique<WoundDef> (0, 0);
+    potion->setUnknown(true); 
+
 }
 
 void Board::addTurn() { enemiesTurn++; }
@@ -353,19 +366,27 @@ void Board::moveHero(const string &dir) {
                 message += "Player gets " + to_string(o->getValue()) + " gold. ";
 
             } else if (o->getlabel() == 'P') {
-                if (o->getName() == "Restore HP potion") {
-                    heroPtr->addHpEffect(o->getValue());
-                } else if (o->getName() == "Poison HP potion") {
-                    heroPtr->addHpEffect(-o->getValue());
-                } else if (o->getName() == "Boost Attack potion") {
+
+                if (RestoreHp *p = dynamic_cast<RestoreHp *>(o.get()); p != nullptr) {
+                    p->setUnknown(false);
+                    heroPtr->addHpEffect(p->getValue());
+                } else if (BoostAtk *p = dynamic_cast<BoostAtk *>(o.get()); p != nullptr) {
+                    p->setUnknown(false);
                     heroPtr->addAtkEffect(o->getValue());
-                } else if (o->getName() == "Wound Attack potion") {
-                    heroPtr->addAtkEffect(-o->getValue());
-                } else if (o->getName() == "Boost Defence potion") {
+                } else if (BoostDef *p = dynamic_cast<BoostDef *>(o.get()); p != nullptr) {
+                    p->setUnknown(false);
                     heroPtr->addDefEffect(o->getValue());
-                } else if (o->getName() == "Wound Defence potion") {
+                } else if (PoisonHp *p = dynamic_cast<PoisonHp *>(o.get()); p != nullptr) {
+                    p->setUnknown(false);
+                    heroPtr->addHpEffect(-p->getValue());
+                } else if (WoundAtk *p = dynamic_cast<WoundAtk *>(o.get()); p != nullptr) {
+                    p->setUnknown(false);
+                    heroPtr->addAtkEffect(-o->getValue());
+                } else if (WoundDef *p = dynamic_cast<WoundDef *>(o.get()); p != nullptr) {
+                    p->setUnknown(false);
                     heroPtr->addDefEffect(-o->getValue());
                 }
+
                 message += "Player uses " + o->getName() + ". ";
 
             } else {
@@ -389,7 +410,11 @@ void Board::moveHero(const string &dir) {
         heroPtr->setX(newPosition.at(0));
         heroPtr->setY(newPosition.at(1));
 
-
+        for (auto obj : objects.at(currentFloor)) {
+            if (obj != nullptr && obj->getlabel() == 'P' && hero->inOneBlockRadius(obj.get())) {
+                message += obj->getName() + " at " + hero->getDirectionTo(obj.get()) + ". ";
+            }
+        }
     }
 }
 

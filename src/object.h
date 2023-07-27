@@ -20,9 +20,10 @@ class Object {
         ~Object();
 
         virtual bool inOneBlockRadius(const Object *other);
+        std::string getDirectionTo(const Object *other);
         std::vector<std::vector<int>> getOneBlockRadius();
         char getlabel();
-        std::string getName();
+        virtual std::string getName();
         std::string getColor();
         virtual int getValue();
         void setValue(int x);

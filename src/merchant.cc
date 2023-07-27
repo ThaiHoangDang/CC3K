@@ -4,8 +4,6 @@
 
 const int defaultHP = 30, defaultAtk = 70, defaultDef = 5;
 
-bool Merchant::isHostile = false;
-
 Merchant::Merchant(int x, int y): 
     Enemy {'M', "Merchant", 4, x, y, defaultHP, defaultAtk, defaultDef} {}
 

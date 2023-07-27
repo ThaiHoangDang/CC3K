@@ -9,6 +9,8 @@ class BoostAtk: public Potion {
     public:
         BoostAtk(int x, int y);
         ~BoostAtk();
+        virtual std::string getName() override;
+        virtual void setUnknown(bool status) override;
 };
 
 #endif

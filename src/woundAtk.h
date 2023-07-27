@@ -9,6 +9,8 @@ class WoundAtk: public Potion {
     public:
         WoundAtk(int x, int y);
         ~WoundAtk();
+        virtual std::string getName() override;
+        virtual void setUnknown(bool status) override;
 };
 
 #endif

@@ -4,7 +4,7 @@
 #include "enemy.h"
 
 class Merchant: public Enemy {
-    static bool isHostile;
+    inline static bool isHostile = false;
 
     public: 
         Merchant(int x, int y);

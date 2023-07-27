@@ -9,6 +9,8 @@ class BoostDef: public Potion {
     public:
         BoostDef(int x, int y);
         ~BoostDef();
+        virtual std::string getName() override;
+        virtual void setUnknown(bool status) override;
 };
 
 #endif

@@ -17,6 +17,17 @@ bool Object::inOneBlockRadius(const Object *other) {
         (other->getY() >= y - 1) && (other->getY() <= y + 1));
 }
 
+string Object::getDirectionTo(const Object *other) {
+    if ((x == other->getX()) && (y == other->getY() + 1)) return "North";
+    if ((x == other->getX()) && (y == other->getY() - 1)) return "South";
+    if ((x == other->getX() + 1) && (y == other->getY())) return "West";
+    if ((x == other->getX() - 1) && (y == other->getY())) return "East";
+    if ((x == other->getX() + 1) && (y == other->getY() + 1)) return "North West";
+    if ((x == other->getX() - 1) && (y == other->getY() + 1)) return "North East";
+    if ((x == other->getX() + 1) && (y == other->getY() - 1)) return "South West";
+    if ((x == other->getX() - 1) && (y == other->getY() - 1)) return "South East";    
+}
+
 vector<vector<int>> Object::getOneBlockRadius() {
     vector<vector<int>> oneBlockCells;
 
