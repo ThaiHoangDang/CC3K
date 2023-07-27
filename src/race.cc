@@ -11,7 +11,10 @@ Race::~Race() {}
 int Race::attack(Living *e) {
     int damage = ceil((100.0/(100 + e->getDef())) * getTotalAtk());
     if (e->defence(damage)) {
-        if (e->getHp() == 0) { addScore(e->getValue()); }
+        if (e->getHp() == 0) { 
+            addScore(e->getValue()); 
+            addEnemiesKilled();
+        }
         return damage;
     }
     return 0;
@@ -35,6 +38,10 @@ void Race::resetEffect() {
     defEffect = 0;
 }
 
+void Race::addNumMove() { numMoves++; }
+
+void Race::addEnemiesKilled() { enemiesKilled++; }
+
 void Race::addHpEffect(int x) { setHp(getHp() + x); }
 
 void Race::addAtkEffect(int x) { 
@@ -54,3 +61,7 @@ int Race::getDefEffect() { return defEffect; }
 int Race::getTotalAtk() { return getAtk() + getAtkEffect(); }
 
 int Race::getTotalDef() { return getDef() + getDefEffect(); }
+
+int Race::getNumMove() { return numMoves; }
+
+int Race::getNumEnemiesKilled() { return enemiesKilled; }

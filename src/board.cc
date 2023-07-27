@@ -338,6 +338,9 @@ void Board::moveHero(const string &dir) {
     Race *heroPtr = static_cast<Race *>(hero.get());
     vector<int> newPosition = getNewPosition(hero.get(), dir);
     char c = maps.at(currentFloor).at(newPosition.at(0) + newPosition.at(1) * width);
+    
+    heroPtr->addNumMove();
+
     if (c == '.' || c == '#' || c == '+') {
         shared_ptr<Object> o = objects.at(currentFloor).at(newPosition.at(0) + 
                 newPosition.at(1) * width);

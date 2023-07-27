@@ -11,3 +11,8 @@ void Troll::setHp(int h) {
     else if (h < 0) hp = 0;
     else hp = h;
 }
+
+void Troll::addNumMove() {
+    numMoves++;
+    setHp(getHp() + 5);
+}

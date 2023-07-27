@@ -97,7 +97,11 @@ bool end(Race *hero, string status) {
     cout << setw(space) << "\033[" + to_string(31) + "m" + "Atk: " 
             << hero->getTotalAtk() << "\033[m" << endl;
     cout << setw(space) << "\033[" + to_string(31) + "m" + "Def: " 
-            << hero->getTotalDef() << "\033[m" << endl << endl << endl;
+            << hero->getTotalDef() << "\033[m" << endl;
+    cout << setw(space) << "\033[" + to_string(32) + "m" + "Number of moves: " 
+            << hero->getNumMove() << "\033[m" << endl;
+    cout << setw(space) << "\033[" + to_string(32) + "m" + "Enemies killed: " 
+            << hero->getNumEnemiesKilled() << "\033[m" << endl << endl << endl;
 
     input = "";
     while (input != "y" && input != "n") {

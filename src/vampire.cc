@@ -16,7 +16,10 @@ int Vampire::attack(Living *e) {
     int damage = ceil((100.0/(100 + e->getDef())) * getTotalAtk());
     if (e->defence(damage)) {
         setHp(getHp() + 5);
-        if (e->getHp() == 0) { addScore(e->getValue()); }
+        if (e->getHp() == 0) { 
+            addScore(e->getValue()); 
+            addEnemiesKilled();
+        }
         return damage;
     }
     return 0;
