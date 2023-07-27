@@ -14,6 +14,7 @@ class Living: public Object {
         Living(char label, const std::string &name, const std::string &color, 
             int value, int x, int y, int hp, int atk, int def);
         ~Living();
+        virtual int attack(Living *l) = 0;
         virtual bool defence(int damage) = 0;
         virtual int getHp();
         virtual int getAtk();

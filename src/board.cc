@@ -291,7 +291,11 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
     hero->setY(heroPositions.at(currentFloor).at(1));
 }
 
-Board::~Board() {}
+Board::~Board() {
+    unique_ptr<Merchant> merchant = make_unique<Merchant>(0, 0);
+    merchant->setIsHostile(false);
+    
+}
 
 void Board::addTurn() { enemiesTurn++; }
 
@@ -367,15 +371,15 @@ void Board::moveHero(const string &dir) {
             } else {
                 Living *enemyPtr = static_cast<Living *>(o.get());
                 int damage = heroPtr->attack(enemyPtr);
-                message += "Player kills " + enemyPtr->getName() + " and gets " + 
-                    to_string((hero->getName() != "Goblin") ? enemyPtr->getValue() : 
-                    enemyPtr->getValue() + 5) + " gold. ";
 
                 if (enemyPtr->getHp() != 0) {
-                    message.clear();
                     message += "Player deals " + to_string(damage) + " damage to " + 
                         enemyPtr->getName() + " (" + to_string(enemyPtr->getHp()) + " HP). ";
                     return;
+                } else {
+                    message += "Player kills " + enemyPtr->getName() + " and gets " + 
+                        to_string((hero->getName() != "Goblin") ? enemyPtr->getValue() : 
+                        enemyPtr->getValue() + 5) + " gold. ";
                 }
             }
         }
@@ -384,6 +388,8 @@ void Board::moveHero(const string &dir) {
         objects.at(currentFloor).at(hero->getX() + hero->getY() * width) = nullptr;
         heroPtr->setX(newPosition.at(0));
         heroPtr->setY(newPosition.at(1));
+
+
     }
 }
 
@@ -398,9 +404,7 @@ void Board::moveEnemies() {
             if (enemyPtr->inOneBlockRadius(hero.get())) {
                 Living *l = static_cast<Living *>(hero.get());
                 int damage = enemyPtr->attack(l);
-                if (damage == 0) {
-                    message += "Player dodges attack of " + enemyPtr->getName() + "!";
-                } else {
+                if (damage != 0) {
                     message += enemyPtr->getName() + " deals " + to_string(damage) + " damage to PC. ";
                 }
             } else if (enemyPtr->getName() != "Dragon") {
@@ -433,21 +437,6 @@ int colorCode(const string &color) {
 }
 
 void Board::display() {
-
-    // for (size_t z = 0; z < maps.size(); z++) {
-    //     for (int i = 0; i < height; i++) {
-    //         for (int j = 0; j < width; j++) {
-    //             if (objects.at(z).at(i * width + j) != nullptr) {
-    //                 string color = objects.at(z).at(i * width + j)->getColor();
-    //                 cout << "\033[" << colorCode(color) << "m" << 
-    //                     objects.at(z).at(i * width + j)->getlabel() << "\033[m";
-    //             } else {
-    //                 cout << maps.at(z).at(i * width + j);
-    //             }
-    //         }
-    //         cout << endl;
-    //     }
-    // }
     
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
