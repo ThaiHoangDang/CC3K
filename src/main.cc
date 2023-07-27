@@ -19,7 +19,7 @@ void printFile(const string &file) {
     string line;
 
     while (getline(f, line)) {
-        cout << line << endl;
+        // cout << line << endl;
     }
 }
 
@@ -117,6 +117,7 @@ bool end(Race *hero, string status) {
 // run the game
 bool run(const string &map, const int seed = seedGenerator()) {
 
+    // check if map name is valid
     ifstream testMap {"layout/" + map};
     if (! testMap.is_open()) {
         cout << "Cannot find map!" << endl;
@@ -151,6 +152,7 @@ bool run(const string &map, const int seed = seedGenerator()) {
     // display initial board
     board->display();
 
+    // run command from user
     while (cin >> command) {
         if (command == "no") {
             board->moveHero("no");
@@ -205,8 +207,8 @@ bool run(const string &map, const int seed = seedGenerator()) {
             return end(heroPtr, "lose");
         }
 
+        // display map
         board->display();
-
     }
 
     return 0;

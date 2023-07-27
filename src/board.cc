@@ -397,7 +397,12 @@ void Board::moveEnemies() {
             
             if (enemyPtr->inOneBlockRadius(hero.get())) {
                 Living *l = static_cast<Living *>(hero.get());
-                message += enemyPtr->getName() + " deals " + to_string(enemyPtr->attack(l)) + " to PC. ";
+                int damage = enemyPtr->attack(l);
+                if (damage == 0) {
+                    message += "Player dodges attack of " + enemyPtr->getName() + "!";
+                } else {
+                    message += enemyPtr->getName() + " deals " + to_string(damage) + " damage to PC. ";
+                }
             } else if (enemyPtr->getName() != "Dragon") {
                 vector<vector<int>> oneRaidusBlocks = enemyPtr->getOneBlockRadius();
                 vector<vector<int>> avaiBlocks = availableOneRadiusBlock
