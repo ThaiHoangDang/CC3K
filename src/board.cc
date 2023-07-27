@@ -139,7 +139,7 @@ vector<vector<Object *>> DragonAndHoardCombine(vector<Object *> &dragons, vector
             for (size_t k = 0; k < dragons.size(); ++k) {
                 Object *a = dragons[(i + k) % dragons.size()];
                 Object *b = dragonHoards[(j + k) % dragonHoards.size()];
-                if (! a->inOneBlockRadius(b)) {
+                if (! b->inOneBlockRadius(a)) {
                     valid_combination = false;
                     break;
                 }
