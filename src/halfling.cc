@@ -8,6 +8,15 @@ Halfling::Halfling(int x, int y):
 
 Halfling::~Halfling() {}
 
+bool Halfling::defence(int damage) {
+    if (rand() % 2 == 0) {
+        return false;
+    } else {
+        setHp(getHp() - damage);
+        return true;
+    }
+}
+
 void Halfling::setHp(int h) {
     if (h > defaultHP) hp = defaultHP;
     else if (h < 0) hp = 0;

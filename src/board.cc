@@ -42,7 +42,6 @@ shared_ptr<Object> makeObjFromLabel(char c, int x, int y) {
     if (c == '5') return make_shared<WoundDef>(x, y);
     if (c == '6') return make_shared<NormalGold>(x, y);
     if (c == '7') return make_shared<SmallGold>(x, y);
-    // if (c == '8') return make_shared<>();
     if (c == '9') return make_shared<DragonHoard>(x, y);
     if (c == 'H') return make_shared<Human>(x, y);
     if (c == 'W') return make_shared<Dwarf>(x, y);
@@ -366,7 +365,7 @@ void Board::moveHero(const string &dir) {
                     }
                 }
                 heroPtr->addScore(o->getValue());
-                message += "Player gets " + to_string(o->getValue()) + " gold. ";
+                message += "Player picks up " + o->getName() + " (" + to_string(o->getValue()) + " value). ";
 
             } else if (o->getlabel() == 'P') {
 
@@ -397,8 +396,12 @@ void Board::moveHero(const string &dir) {
                 int damage = heroPtr->attack(enemyPtr);
 
                 if (enemyPtr->getHp() != 0) {
-                    message += "Player deals " + to_string(damage) + " damage to " + 
-                        enemyPtr->getName() + " (" + to_string(enemyPtr->getHp()) + " HP). ";
+                    if (damage == 0) {
+                        message += "Player misses the attack! ";
+                    } else {
+                        message += "Player deals " + to_string(damage) + " damage to " + 
+                            enemyPtr->getName() + " (" + to_string(enemyPtr->getHp()) + " HP). ";
+                    }
                     return;
                 } else {
                     message += "Player kills " + enemyPtr->getName() + " and gets " + 
@@ -431,9 +434,12 @@ void Board::moveEnemies() {
             
             if (enemyPtr->inOneBlockRadius(hero.get())) {
                 Living *l = static_cast<Living *>(hero.get());
-                int damage = enemyPtr->attack(l);
-                if (damage != 0) {
-                    message += enemyPtr->getName() + " deals " + to_string(damage) + " damage to PC. ";
+                int numAttacks = (enemyPtr->getName() == "Elf" && hero->getName() != "Drow") ? 2 : 1;
+                for (int i = 0; i < numAttacks; i++) {
+                    int damage = enemyPtr->attack(l);
+                    if (damage != 0) {
+                        message += enemyPtr->getName() + " deals " + to_string(damage) + " damage to PC. ";
+                    }
                 }
             } else if (enemyPtr->getName() != "Dragon") {
                 vector<vector<int>> oneRaidusBlocks = enemyPtr->getOneBlockRadius();

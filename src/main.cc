@@ -35,7 +35,7 @@ shared_ptr<Object> pickHero() {
         cout << "Hero: ";
         cin >> input;
 
-        if (cin.eof()) return nullptr;
+        if (cin.eof() || input == "q") return nullptr;
 
         if (input == "Shade" || input == "shade" || input == "s") {
             return make_shared<Shade>(0, 0);
@@ -98,9 +98,9 @@ bool end(Race *hero, string status) {
             << hero->getTotalAtk() << "\033[m" << endl;
     cout << setw(space) << "\033[" + to_string(31) + "m" + "Def: " 
             << hero->getTotalDef() << "\033[m" << endl;
-    cout << setw(space) << "\033[" + to_string(32) + "m" + "Number of moves: " 
+    cout << setw(space) << "\033[" + to_string(32) + "m" + "# Moves: " 
             << hero->getNumMove() << "\033[m" << endl;
-    cout << setw(space) << "\033[" + to_string(32) + "m" + "Enemies killed: " 
+    cout << setw(space) << "\033[" + to_string(32) + "m" + "# Kills: " 
             << hero->getNumEnemiesKilled() << "\033[m" << endl << endl << endl;
 
     input = "";
@@ -136,7 +136,7 @@ bool run(const string &map, const int seed = seedGenerator()) {
     printFile("display/welcome.txt");
 
     while (input != "y") {
-        cout << "Start? (y/n)" << endl;
+        cout << "Start? (y)" << endl;
         cin >> input;
 
         if (cin.eof() || input == "q") return 0;
