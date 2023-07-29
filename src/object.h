@@ -17,7 +17,7 @@ class Object {
     public:
         Object(char label, const std::string &name, 
             const std::string &color, int value, int x, int y);
-        ~Object();
+        virtual ~Object() = 0;
 
         virtual bool inOneBlockRadius(const Object *other);
         std::string getDirectionTo(const Object *other);

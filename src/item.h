@@ -9,7 +9,7 @@ class Item: public Object {
     public:
         Item(char label, const std::string &name, 
             const std::string &color, int value, int x, int y);
-        ~Item();
+        virtual ~Item();
 };
 
 #endif
