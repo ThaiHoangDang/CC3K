@@ -2,12 +2,15 @@
 
 using namespace std;
 
+
 const int defaultHP = 150, defaultAtk = 20, defaultDef = 20;
 
 Dragon::Dragon(int x, int y, DragonHoard *guard): 
     Enemy {'D', "Dragon", 0, x, y, defaultHP, defaultAtk, defaultDef}, guard {guard} {}
 
+
 Dragon::~Dragon() {}
+
 
 void Dragon::setHp(int h) {
     if (h > defaultHP) hp = defaultHP;
@@ -17,11 +20,14 @@ void Dragon::setHp(int h) {
     if (hp == 0) guard->setIsGuarded(false);
 }
 
+
+// dragon also checks if Object is in one block radius with its hoard
 bool Dragon::inOneBlockRadius(const Object *other) {
     if (other == nullptr) return false;
     return (((other->getX() >= getX() - 1) && (other->getX() <= getX() + 1) && 
         (other->getY() >= getY() - 1) && (other->getY() <= getY() + 1))) || 
         guard->inOneBlockRadius(other);
 }
+
 
 void Dragon::setGuard(DragonHoard* g) { guard = g; }

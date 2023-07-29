@@ -4,11 +4,12 @@
 #include "living.h"
 
 class Race: public Living {
+
     protected:
-        int atkEffect = 0;
-        int defEffect = 0;
-        int numMoves = 0;
-        int enemiesKilled = 0;
+        int atkEffect = 0; // attack effect from potion
+        int defEffect = 0; // defence effect from potion
+        int numMoves = 0; // keep track of # moves
+        int enemiesKilled = 0; // keep track of # kills
 
     public:
         Race(const std::string &name, int x, int y, int hp, int atk, int def);

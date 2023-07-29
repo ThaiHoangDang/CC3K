@@ -8,10 +8,10 @@
 #include "woundAtk.h"
 #include "woundDef.h"
 
-
 using namespace std;
 
 
+// create potion based on proportion
 shared_ptr<Object> PotionGenerator::createObject(int x, int y) {
     int random = rand() % 6;
 

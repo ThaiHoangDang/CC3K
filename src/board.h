@@ -9,10 +9,10 @@
 
 class Board {
     std::shared_ptr<Object> hero;
-    std::vector<std::vector<int>> heroPositions;
-    std::vector<std::vector<char>> maps;
-    std::vector<std::vector<std::shared_ptr<Object>>> objects;
-    std::vector<std::vector<std::unique_ptr<Chamber>>> chambers;
+    std::vector<std::vector<int>> heroPositions; // hero positions in each floor 
+    std::vector<std::vector<char>> maps; // map layout of all floors
+    std::vector<std::vector<std::shared_ptr<Object>>> objects; // objects layout of all floors
+    std::vector<std::vector<std::unique_ptr<Chamber>>> chambers; // chambers of all floors
 
     const int height = 25, width = 79, numPotions = 10, numEnemies = 20, numGold = 10;
     unsigned int currentFloor = 0, enemiesTurn = 0;

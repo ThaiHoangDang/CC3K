@@ -19,9 +19,10 @@ void printFile(const string &file) {
     string line;
 
     while (getline(f, line)) {
-        // cout << line << endl;
+        cout << line << endl;
     }
 }
+
 
 // choose hero based on input
 shared_ptr<Object> pickHero() {
@@ -53,6 +54,7 @@ shared_ptr<Object> pickHero() {
     }
 }
 
+
 // generate seed and write to file
 int seedGenerator() {
     ofstream os {"data/seeds.txt", std::ios::app};
@@ -62,13 +64,14 @@ int seedGenerator() {
         exit(1);
     }
 
-    int seed = time(NULL);
-
-    os << seed << endl;
+    int seed = time(NULL);  // create seed based on time
+    os << seed << endl;  // write seed to file
 
     return seed;
 }
 
+
+// game ending
 bool end(Race *hero, string status) {
     const int space = 44;
     string input;
@@ -76,6 +79,7 @@ bool end(Race *hero, string status) {
     if (status == "win") {
         // display win message
         printFile("display/win.txt");
+
     } else if (status == "lose") {
         // display lose message
         printFile("display/lose.txt");  
@@ -88,6 +92,7 @@ bool end(Race *hero, string status) {
         if (cin.eof() || input == "q") return 0;
     }
 
+    // display stat
     cout << setw(space) << "\033[" + to_string(33) + "m" + "Score: " 
             << hero->getValue() << "\033[m" << endl;
     cout << setw(space) << "\033[" + to_string(36) + "m" + "Race: " 
@@ -110,13 +115,15 @@ bool end(Race *hero, string status) {
 
         if (cin.eof() || input == "q") return 0;
     }
-
+    
+    // restart the game or quit based on input
     if (input == "y") {
         return 1;
     } else {
         return 0;
     }
 }
+
 
 // run the game
 bool run(const string &map, const int seed = seedGenerator()) {
@@ -218,15 +225,19 @@ bool run(const string &map, const int seed = seedGenerator()) {
     return 0;
 }
 
+
 int main(int argc, char *argv[]) {
 
-    if (argc == 1) {
+    if (argc == 1) {  // no args provided
         while (run("default.txt"));
-    } else if (argc == 2) {
+
+    } else if (argc == 2) {  // process map
         string map = argv[1];
         while (run(map));
-    } else {
+
+    } else {  // process map and seed
         string map, seed;
+
         for (int i = 1; i < argc; i++) {
             string temp = argv[i];
 

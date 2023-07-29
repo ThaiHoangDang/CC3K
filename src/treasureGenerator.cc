@@ -8,6 +8,7 @@
 using namespace std;
 
 
+// create treasure based on proportion
 shared_ptr<Object> TreasureGenerator::createObject(int x, int y) {
     int random = rand() % 8;
 

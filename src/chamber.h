@@ -5,7 +5,7 @@
 
 
 class Chamber {
-    std::vector<std::vector<int>> cells;
+    std::vector<std::vector<int>> cells; // list of cells in chamber
 
     public:
         Chamber(int x, int y, const std::vector<char> &floorMap, int height, int width);

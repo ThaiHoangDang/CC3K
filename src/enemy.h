@@ -13,7 +13,6 @@ class Enemy: public Living {
         virtual int attack(Living *l);
         virtual bool defence(int damage) override;
         unsigned int getTurn();
-        void turn();
         void addOneTurn();
 };
 

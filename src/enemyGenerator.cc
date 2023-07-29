@@ -11,6 +11,7 @@
 using namespace std;
 
 
+// create enemies based on proportion
 shared_ptr<Object> EnemyGenerator::createObject(int x, int y) {
     int random = rand() % 18;
 

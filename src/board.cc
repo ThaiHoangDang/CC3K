@@ -55,15 +55,18 @@ shared_ptr<Object> makeObjFromLabel(char c, int x, int y) {
 }
 
 
-// detect and create chamber
+// detect and create chambers
 vector<vector<unique_ptr<Chamber>>> createChambers
         (const vector<vector<char>> &maps, int height, int width) {
-
+    
     vector<vector<unique_ptr<Chamber>>> chambers;
 
+    // loop through each floor
     for (const auto &it : maps) {
+
         vector<unique_ptr<Chamber>> floorChambers;
 
+        // create new chamber if there is no chamber contain a particular cell
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (it.at(i * width + j) == '.') {
@@ -94,7 +97,7 @@ vector<vector<unique_ptr<Chamber>>> createChambers
 }
 
 
-// return random floor cell in a random chamber
+// return an available random floor cell in a random chamber
 vector<int> getSpawnPlace(vector<unique_ptr<Chamber>> &floorChamber, 
         vector<shared_ptr<Object>> &floorObject, int width) {
     
@@ -102,11 +105,13 @@ vector<int> getSpawnPlace(vector<unique_ptr<Chamber>> &floorChamber,
         int randomChamber = rand() % floorChamber.size();
         vector<int> randomCell = floorChamber.at(randomChamber)->getRandomCell();
 
+        // check if cell is empty
         if (floorObject.at(randomCell.at(1) * width + randomCell.at(0)) == nullptr) {
             return randomCell;
         }
     }
 }
+
 
 // return a vector of available blocks to move to
 vector<vector<int>> availableOneRadiusBlock(vector<char> &floorMap, 
@@ -119,6 +124,7 @@ vector<vector<int>> availableOneRadiusBlock(vector<char> &floorMap,
         int x = i.at(0);
         int y = i.at(1);
 
+        // check if cell is available
         if (floorMap.at(y * width + x) == '.' && floorObject.at(y * width + x) == nullptr) {
             avaiBlocks.emplace_back(vector<int> {x, y});
         } 
@@ -126,6 +132,7 @@ vector<vector<int>> availableOneRadiusBlock(vector<char> &floorMap,
 
     return avaiBlocks;
 }
+
 
 // return the first valid combination of Dragon and Dragon Hoard
 vector<vector<Object *>> DragonAndHoardCombine(vector<Object *> &dragons, vector<Object *> &dragonHoards) {
@@ -135,24 +142,30 @@ vector<vector<Object *>> DragonAndHoardCombine(vector<Object *> &dragons, vector
         for (size_t j = 0; j < dragonHoards.size(); ++j) {
             bool valid_combination = true;
             combination.clear();
+
             for (size_t k = 0; k < dragons.size(); ++k) {
                 Object *a = dragons[(i + k) % dragons.size()];
                 Object *b = dragonHoards[(j + k) % dragonHoards.size()];
+
+                // check if dragon and dragon hoard are in one block radius
                 if (! b->inOneBlockRadius(a)) {
                     valid_combination = false;
                     break;
                 }
-                std::vector<Object *> pair = {a, b};
+                std::vector<Object *> pair = {a, b};    
                 combination.push_back(pair);
             }
+
+            // return as soon as there is a valid combination
             if (valid_combination) {
                 return combination;
             }
-        }
+        }                                           
     }
 
     return combination;
 }
+
 
 // link Dragon and Dragon Hoard together
 void linkDragonAndHoard(vector<vector<shared_ptr<Object>>> &objects) {
@@ -161,6 +174,7 @@ void linkDragonAndHoard(vector<vector<shared_ptr<Object>>> &objects) {
         vector<Object *> dragons;
         vector<Object *> dragonHoards;
         
+        // create 2 vectors of Dragon and Dragon Hoard
         for (auto obj : floor) {
             if (obj != nullptr && obj->getName() == "Dragon") {
                 dragons.push_back(obj.get());
@@ -169,8 +183,10 @@ void linkDragonAndHoard(vector<vector<shared_ptr<Object>>> &objects) {
             }
         }
 
+        // get first valid combination
         vector<vector<Object *>> combination = DragonAndHoardCombine(dragons, dragonHoards);
 
+        // link Dragon and Dragon Hoard in a pair together
         for (auto pair : combination) {
             Dragon *dragonPtr = static_cast<Dragon *>(pair.at(0));
             DragonHoard *dragonHoardPtr = static_cast<DragonHoard *>(pair.at(1));
@@ -191,8 +207,10 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
     
     // read map from file
     while (line.length() != 0) {
-        vector<char> floorMap;
-        vector<shared_ptr<Object>> floorObj;
+        vector<char> floorMap; // floor layout
+        vector<shared_ptr<Object>> floorObj; // objects layout
+
+        // create Objects at corresponding position
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (line.at(j) != '|' && line.at(j) != '-' && 
@@ -258,12 +276,12 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
                 shared_ptr<Object> newObj = generator->createObject(gp.at(0), gp.at(1));
                 objects.at(i).at(gp.at(1) * width + gp.at(0)) = newObj;
 
-                // generate dragon for Dragon Hoard
+                // generate Dragon for Dragon Hoard
                 if (newObj->getName() == "Dragon Hoard") {
                     vector<vector<int>> oneRaidusBlocks = newObj->getOneBlockRadius();
                     vector<vector<int>> avaiBlocks = availableOneRadiusBlock(maps.at(i), objects.at(i), oneRaidusBlocks, width);
 
-                    // The dragon hoard will not be protected if there is no available blocks for the dragon
+                    // edge case: Dragon hoard will not be protected if there is no available blocks for the dragon
                     if (avaiBlocks.size() != 0) {
                         int random = rand() % avaiBlocks.size();
                         int x = avaiBlocks.at(random).at(0);
@@ -290,6 +308,7 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
     hero->setY(heroPositions.at(currentFloor).at(1));
 }
 
+// set all static fields to correct state
 Board::~Board() {
     unique_ptr<Merchant> merchant = make_unique<Merchant>(0, 0);
     merchant->setIsHostile(false);
@@ -306,21 +325,26 @@ Board::~Board() {
     potion->setUnknown(true); 
     potion = make_unique<WoundDef> (0, 0);
     potion->setUnknown(true); 
-
 }
+
 
 void Board::addTurn() { enemiesTurn++; }
 
+
 void Board::resetTurn() { enemiesTurn = 0; }
+
 
 int Board::getCurFloor() {
     return currentFloor;
 }
 
+
 int Board::getNumFloor() {
     return maps.size();
 }
 
+
+// return the position based on direction to obj
 vector<int> getNewPosition(Object* obj, const string &dir) {
     if (dir == "no") return vector<int> {obj->getX(), obj->getY() - 1};
     if (dir == "so") return vector<int> {obj->getX(), obj->getY() + 1};
@@ -330,22 +354,25 @@ vector<int> getNewPosition(Object* obj, const string &dir) {
     if (dir == "nw") return vector<int> {obj->getX() - 1, obj->getY() - 1};
     if (dir == "se") return vector<int> {obj->getX() + 1, obj->getY() + 1};
     return vector<int> {obj->getX() - 1, obj->getY() + 1};
-    
 }
 
+
+// hero turn
 void Board::moveHero(const string &dir) {
     Race *heroPtr = static_cast<Race *>(hero.get());
     vector<int> newPosition = getNewPosition(hero.get(), dir);
     char c = maps.at(currentFloor).at(newPosition.at(0) + newPosition.at(1) * width);
     
+    // update number of movement of player
     heroPtr->addNumMove();
 
+    // check if it is a valid move
     if (c == '.' || c == '#' || c == '+') {
         shared_ptr<Object> o = objects.at(currentFloor).at(newPosition.at(0) + 
                 newPosition.at(1) * width);
 
         if (o != nullptr) {
-            if (o->getlabel() == '\\') {
+            if (o->getlabel() == '\\') {  // player goes to stair
                 currentFloor++;
                 if (currentFloor != maps.size()) {
                     heroPtr->setX(heroPositions.at(currentFloor).at(0));
@@ -356,10 +383,10 @@ void Board::moveHero(const string &dir) {
                 }
                 return;
 
-            } else if (o->getlabel() == 'G') {
+            } else if (o->getlabel() == 'G') { // player pick up gold
                 if (o->getName() == "Dragon Hoard") {
                     DragonHoard *dhPtr = static_cast<DragonHoard *>(o.get());
-                    if (dhPtr->getIsGuarded()) {
+                    if (dhPtr->getIsGuarded()) {  // cannot pick up if Dragon Hoard is guarded
                         message += "Dragon Hoard is guarded. ";
                         return;
                     }
@@ -367,8 +394,9 @@ void Board::moveHero(const string &dir) {
                 heroPtr->addScore(o->getValue());
                 message += "Player picks up " + o->getName() + " (" + to_string(o->getValue()) + " value). ";
 
-            } else if (o->getlabel() == 'P') {
+            } else if (o->getlabel() == 'P') {  // player uses potion
 
+                // set Unknown status and apply potion effect to hero
                 if (RestoreHp *p = dynamic_cast<RestoreHp *>(o.get()); p != nullptr) {
                     p->setUnknown(false);
                     heroPtr->addHpEffect(p->getValue());
@@ -391,11 +419,11 @@ void Board::moveHero(const string &dir) {
 
                 message += "Player uses " + o->getName() + ". ";
 
-            } else {
+            } else {  // player attacks enemies
                 Living *enemyPtr = static_cast<Living *>(o.get());
                 int damage = heroPtr->attack(enemyPtr);
 
-                if (enemyPtr->getHp() != 0) {
+                if (enemyPtr->getHp() != 0) {  // enemy not die
                     if (damage == 0) {
                         message += "Player misses the attack! ";
                     } else {
@@ -403,7 +431,8 @@ void Board::moveHero(const string &dir) {
                             enemyPtr->getName() + " (" + to_string(enemyPtr->getHp()) + " HP). ";
                     }
                     return;
-                } else {
+
+                } else {  // enemy dies
                     message += "Player kills " + enemyPtr->getName() + " and gets " + 
                         to_string((hero->getName() != "Goblin") ? enemyPtr->getValue() : 
                         enemyPtr->getValue() + 5) + " gold. ";
@@ -411,11 +440,13 @@ void Board::moveHero(const string &dir) {
             }
         }
 
+        // set new position for hero
         objects.at(currentFloor).at(newPosition.at(0) + newPosition.at(1) * width) = hero;
         objects.at(currentFloor).at(hero->getX() + hero->getY() * width) = nullptr;
         heroPtr->setX(newPosition.at(0));
         heroPtr->setY(newPosition.at(1));
 
+        // display potions that are in one block radius
         for (auto obj : objects.at(currentFloor)) {
             if (obj != nullptr && obj->getlabel() == 'P' && hero->inOneBlockRadius(obj.get())) {
                 message += obj->getName() + " at " + hero->getDirectionTo(obj.get()) + ". ";
@@ -424,28 +455,37 @@ void Board::moveHero(const string &dir) {
     }
 }
 
+
+// enemies turn
 void Board::moveEnemies() {
 
+    // move enemies in line by line fashion
     for (auto i : objects.at(currentFloor)) {
         Object *objPtr = i.get();
         Enemy *enemyPtr = dynamic_cast<Enemy *>(objPtr);
 
+        // run if it is an Enemy and with a valid turn
         if (enemyPtr != nullptr && enemyPtr->getTurn() == enemiesTurn) {
             
+            // attack hero if in one block radius
             if (enemyPtr->inOneBlockRadius(hero.get())) {
                 Living *l = static_cast<Living *>(hero.get());
                 int numAttacks = (enemyPtr->getName() == "Elf" && hero->getName() != "Drow") ? 2 : 1;
+
                 for (int i = 0; i < numAttacks; i++) {
                     int damage = enemyPtr->attack(l);
                     if (damage != 0) {
                         message += enemyPtr->getName() + " deals " + to_string(damage) + " damage to PC. ";
                     }
                 }
+
+            // perform enemy movement if not dragon
             } else if (enemyPtr->getName() != "Dragon") {
                 vector<vector<int>> oneRaidusBlocks = enemyPtr->getOneBlockRadius();
                 vector<vector<int>> avaiBlocks = availableOneRadiusBlock
                     (maps.at(currentFloor), objects.at(currentFloor), oneRaidusBlocks, width);
 
+                // edge case: enemy will not move if no available blocks
                 if (avaiBlocks.size() != 0) {
                     int random = rand() % avaiBlocks.size();
                     int x = avaiBlocks.at(random).at(0);
@@ -457,12 +497,15 @@ void Board::moveEnemies() {
                     enemyPtr->setY(y);
                 }
             }
+
+            // update turn
             enemyPtr->addOneTurn();
         }
     }
 }
 
 
+// return color code based on colors
 int colorCode(const string &color) {
     if (color == "blue") return 36;
     if (color == "yellow") return 33;
@@ -470,8 +513,11 @@ int colorCode(const string &color) {
     else return 31;
 }
 
+
+// display board
 void Board::display() {
     
+    // print row by row and col by col within each row
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             if (objects.at(currentFloor).at(i * width + j) != nullptr) {
@@ -485,6 +531,7 @@ void Board::display() {
         cout << endl;
     }
 
+    // print information board
     Race *heroPtr = static_cast<Race *>(hero.get());
     int score = (heroPtr->getName() == "Shade") ? heroPtr->getValue() / 2 : heroPtr->getValue();
     string firstLine = "Race: " + heroPtr->getName() + " | " + 

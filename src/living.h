@@ -5,6 +5,7 @@
 #include "object.h"
 
 class Living: public Object {
+
     protected:
         int hp;
         int atk;
@@ -22,7 +23,6 @@ class Living: public Object {
         virtual void setHp(int h);
         virtual void setAtk(int a);
         virtual void setDef(int d);
-
 };
 
 #endif
