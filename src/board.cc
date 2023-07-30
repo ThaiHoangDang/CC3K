@@ -56,49 +56,49 @@ shared_ptr<Object> makeObjFromLabel(char c, int x, int y) {
 
 
 // detect and create chambers
-vector<vector<unique_ptr<Chamber>>> createChambers
-        (const vector<vector<char>> &maps, int height, int width) {
+vector<vector<unique_ptr<Extender>>> createExtender
+        (char c, const vector<vector<char>> &maps, int height, int width) {
     
-    vector<vector<unique_ptr<Chamber>>> chambers;
+    vector<vector<unique_ptr<Extender>>> extenders;
 
     // loop through each floor
     for (const auto &it : maps) {
 
-        vector<unique_ptr<Chamber>> floorChambers;
+        vector<unique_ptr<Extender>> floorExtenders;
 
         // create new chamber if there is no chamber contain a particular cell
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (it.at(i * width + j) == '.') {
-                    if (floorChambers.size() == 0) {
-                        floorChambers.emplace_back(make_unique<Chamber>
-                                (j, i, it, height, width));
+                if (it.at(i * width + j) == c) {
+                    if (floorExtenders.size() == 0) {
+                        floorExtenders.emplace_back(make_unique<Extender>
+                                (c, j, i, it, width));
                     } else {
                         bool isIn = false;
-                        for (auto &it : floorChambers) {
+                        for (auto &it : floorExtenders) {
                             if (it->isIn(j, i)) {
                                 isIn = true;
                             }
                         }
 
                         if (! isIn) {
-                            floorChambers.emplace_back(make_unique<Chamber>
-                                    (j, i, it, height, width));
+                            floorExtenders.emplace_back(make_unique<Extender>
+                                    (c, j, i, it, width));
                         }
                     }
                 }
             }
         }
         
-        chambers.emplace_back(std::move(floorChambers));
+        extenders.emplace_back(std::move(floorExtenders));
     }
 
-    return chambers;
+    return extenders;
 }
 
 
 // return an available random floor cell in a random chamber
-vector<int> getSpawnPlace(vector<unique_ptr<Chamber>> &floorChamber, 
+vector<int> getSpawnPlace(vector<unique_ptr<Extender>> &floorChamber, 
         vector<shared_ptr<Object>> &floorObject, int width) {
     
     while (true) {
@@ -238,7 +238,10 @@ Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
 
 
     // use algorithm to detect and create chambers
-    chambers = createChambers(maps, height, width);
+    chambers = createExtender('.', maps, height, width);
+
+    // use algorithm to detect and create chambers
+    passages = createExtender('#', maps, height, width);
 
     // link dragons and dragon hoards together
     linkDragonAndHoard(objects);
@@ -518,7 +521,14 @@ int colorCode(const string &color) {
 // display board
 void Board::display() {
 
+    // update explored status of chamber
     for (auto &it : chambers.at(currentFloor)) {
+        if ((it->isIn(hero->getX(), hero->getY())) || 
+            (it->inOneBlockRadius(hero->getX(), hero->getY()))) it->setIsExplored(true);
+    }
+
+    // update explored status of passage
+    for (auto &it : passages.at(currentFloor)) {
         if ((it->isIn(hero->getX(), hero->getY())) || 
             (it->inOneBlockRadius(hero->getX(), hero->getY()))) it->setIsExplored(true);
     }
@@ -527,11 +537,12 @@ void Board::display() {
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
 
-            bool inChambers = false;
+            bool inChambersOrPassage = false;
 
             for (auto &it : chambers.at(currentFloor)) {
+
                 if (it->isIn(j, i) || it->inOneBlockRadius(j, i)) {
-                    inChambers = true;
+                    inChambersOrPassage = true;
 
                     if (it->getIsExplored()) {
                         if (objects.at(currentFloor).at(i * width + j) != nullptr) {
@@ -542,13 +553,39 @@ void Board::display() {
                             cout << maps.at(currentFloor).at(i * width + j);
                         }
                     } else {
+                        if (maps.at(currentFloor).at(i * width + j) == '+') {
+                            inChambersOrPassage = false;
+                            break;
+                        }
                         cout << " ";
                     }
                     break;
                 }
             }
 
-            if (! inChambers) {
+            
+            if (inChambersOrPassage == false) {
+                for (auto &it : passages.at(currentFloor)) {
+                    if (it->isIn(j, i) || it->inOneBlockRadius(j, i)) {
+                        inChambersOrPassage = true;
+
+                        if (it->getIsExplored()) {
+                            if (objects.at(currentFloor).at(i * width + j) != nullptr) {
+                                string color = objects.at(currentFloor).at(i * width + j)->getColor();
+                                cout << "\033[" << colorCode(color) << "m" << 
+                                    objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
+                            } else {
+                                cout << maps.at(currentFloor).at(i * width + j);
+                            }
+                        } else {
+                            cout << " ";
+                        }
+                        break;
+                    }
+                }
+            }
+
+            if (! inChambersOrPassage) {
                 if (objects.at(currentFloor).at(i * width + j) != nullptr) {
                     string color = objects.at(currentFloor).at(i * width + j)->getColor();
                     cout << "\033[" << colorCode(color) << "m" << 

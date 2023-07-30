@@ -1,7 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <cstdlib>
-#include "chamber.h"
+#include "extender.h"
 
 using namespace std;
 
@@ -28,7 +28,7 @@ bool in_stack(vector<vector<int>> &queue, int x, int y) {
 }
 
 
-Chamber::Chamber(int x, int y, const std::vector<char> &floorMap, int height, int width) {
+Extender::Extender(char c, int x, int y, const std::vector<char> &floorMap, int width) {
 
     vector<vector<int>> stack;
     stack.emplace_back(vector<int> {x, y});
@@ -44,28 +44,28 @@ Chamber::Chamber(int x, int y, const std::vector<char> &floorMap, int height, in
         int y = value.at(1);
 
         // expand down
-        if ((floorMap.at((y + 1) * width + x) == '.') &&
+        if ((floorMap.at((y + 1) * width + x) == c) &&
                  (! in_cells(cells, x, y + 1)) && 
                  (! in_stack(stack, x, y + 1))) {
             stack.emplace_back(vector<int> {x, y + 1});
         }
     
         // expand up
-        if ((floorMap.at((y - 1) * width + x) == '.') &&
+        if ((floorMap.at((y - 1) * width + x) == c) &&
                  (! in_cells(cells, x, y - 1)) && 
                  (! in_stack(stack, x, y - 1))) {
             stack.emplace_back(vector<int> {x, y - 1});
         }
 
         // expand left
-        if ((floorMap.at(y * width + x - 1) == '.') &&
+        if ((floorMap.at(y * width + x - 1) == c) &&
                  (! in_cells(cells, x - 1, y)) && 
                  (! in_stack(stack, x - 1, y))) {
             stack.emplace_back(vector<int> {x - 1, y});
         }
 
         // expand right
-        if ((floorMap.at(y * width + x + 1) == '.') &&
+        if ((floorMap.at(y * width + x + 1) == c) &&
                  (! in_cells(cells, x + 1, y)) && 
                  (! in_stack(stack, x + 1, y))) {
             stack.emplace_back(vector<int> {x + 1, y});
@@ -74,11 +74,11 @@ Chamber::Chamber(int x, int y, const std::vector<char> &floorMap, int height, in
 }
 
 
-Chamber::~Chamber() {}
+Extender::~Extender() {}
 
 
 // check if a block is in chamber
-bool Chamber::isIn(int x, int y) {
+bool Extender::isIn(int x, int y) {
     for (const auto &it : cells) {
         if (it.at(0) == x && it.at(1) == y) {
             return true;
@@ -89,13 +89,13 @@ bool Chamber::isIn(int x, int y) {
 
 
 // get a random cell in chamber
-vector<int> Chamber::getRandomCell() {
+vector<int> Extender::getRandomCell() {
     int random = rand() % cells.size();
     return cells.at(random);
 }
 
 
-bool Chamber::inOneBlockRadius(int x, int y) {
+bool Extender::inOneBlockRadius(int x, int y) {
     if (! isIn(x, y)) {
         for (const auto &it : cells) {
             if ((x >= it.at(0) - 1) && (x <= it.at(0) + 1) && 
@@ -106,6 +106,6 @@ bool Chamber::inOneBlockRadius(int x, int y) {
 }
 
 
-bool Chamber::getIsExplored() { return isExplored; }
+bool Extender::getIsExplored() { return isExplored; }
 
-void Chamber::setIsExplored(bool status) { isExplored = status; }
+void Extender::setIsExplored(bool status) { isExplored = status; }
