@@ -74,14 +74,14 @@ vector<vector<unique_ptr<Chamber>>> createChambers
                         floorChambers.emplace_back(make_unique<Chamber>
                                 (j, i, it, height, width));
                     } else {
-                        bool is_in = false;
+                        bool isIn = false;
                         for (auto &it : floorChambers) {
-                            if (it->is_in(j, i)) {
-                                is_in = true;
+                            if (it->isIn(j, i)) {
+                                isIn = true;
                             }
                         }
 
-                        if (! is_in) {
+                        if (! isIn) {
                             floorChambers.emplace_back(make_unique<Chamber>
                                     (j, i, it, height, width));
                         }
@@ -514,23 +514,54 @@ int colorCode(const string &color) {
 }
 
 
+
 // display board
 void Board::display() {
+
+    for (auto &it : chambers.at(currentFloor)) {
+        if ((it->isIn(hero->getX(), hero->getY())) || 
+            (it->inOneBlockRadius(hero->getX(), hero->getY()))) it->setIsExplored(true);
+    }
     
     // print row by row and col by col within each row
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            if (objects.at(currentFloor).at(i * width + j) != nullptr) {
-                string color = objects.at(currentFloor).at(i * width + j)->getColor();
-                cout << "\033[" << colorCode(color) << "m" << 
-                    objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
-            } else {
-                cout << maps.at(currentFloor).at(i * width + j);
+
+            bool inChambers = false;
+
+            for (auto &it : chambers.at(currentFloor)) {
+                if (it->isIn(j, i) || it->inOneBlockRadius(j, i)) {
+                    inChambers = true;
+
+                    if (it->getIsExplored()) {
+                        if (objects.at(currentFloor).at(i * width + j) != nullptr) {
+                            string color = objects.at(currentFloor).at(i * width + j)->getColor();
+                            cout << "\033[" << colorCode(color) << "m" << 
+                                objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
+                        } else {
+                            cout << maps.at(currentFloor).at(i * width + j);
+                        }
+                    } else {
+                        cout << " ";
+                    }
+                    break;
+                }
             }
+
+            if (! inChambers) {
+                if (objects.at(currentFloor).at(i * width + j) != nullptr) {
+                    string color = objects.at(currentFloor).at(i * width + j)->getColor();
+                    cout << "\033[" << colorCode(color) << "m" << 
+                        objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
+                } else {
+                    cout << maps.at(currentFloor).at(i * width + j);
+                }
+            }
+
         }
         cout << endl;
     }
-
+    
     // print information board
     Race *heroPtr = static_cast<Race *>(hero.get());
     int score = (heroPtr->getName() == "Shade") ? heroPtr->getValue() / 2 : heroPtr->getValue();

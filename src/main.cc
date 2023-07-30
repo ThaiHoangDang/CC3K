@@ -191,7 +191,9 @@ bool run(const string &map, const int seed = seedGenerator()) {
                 continue;
             }
         } else if (command == "f") {
-            enemyTurn = (enemyTurn == true) ? false : true;
+            enemyTurn = (enemyTurn) ? false : true;
+            cout << ((enemyTurn) ? "Enemies unfreezed" : "Enemies freezed") << endl;
+            continue;
         } else if (command == "r") {
             return 1;
         } else if (command == "q") {

@@ -78,7 +78,7 @@ Chamber::~Chamber() {}
 
 
 // check if a block is in chamber
-bool Chamber::is_in(int x, int y) {
+bool Chamber::isIn(int x, int y) {
     for (const auto &it : cells) {
         if (it.at(0) == x && it.at(1) == y) {
             return true;
@@ -93,3 +93,19 @@ vector<int> Chamber::getRandomCell() {
     int random = rand() % cells.size();
     return cells.at(random);
 }
+
+
+bool Chamber::inOneBlockRadius(int x, int y) {
+    if (! isIn(x, y)) {
+        for (const auto &it : cells) {
+            if ((x >= it.at(0) - 1) && (x <= it.at(0) + 1) && 
+                (y >= it.at(1) - 1) && (y <= it.at(1) + 1)) return true;
+        }
+    }
+    return false;
+}
+
+
+bool Chamber::getIsExplored() { return isExplored; }
+
+void Chamber::setIsExplored(bool status) { isExplored = status; }
