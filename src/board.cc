@@ -199,7 +199,7 @@ void linkDragonAndHoard(vector<vector<shared_ptr<Object>>> &objects) {
 }
 
 
-Board::Board(const std::string &map, shared_ptr<Object> hero): hero {hero} {
+Board::Board(const std::string &map, shared_ptr<Object> hero, string mode): hero {hero}, mode {mode} {
     int numObj = 0;
     string line;
     ifstream f {"layout/" + map};
@@ -517,87 +517,93 @@ int colorCode(const string &color) {
 }
 
 
+// print a floor tile on map
+void Board::printTile(int x, int y) {
+
+    if (objects.at(currentFloor).at(y * width + x) != nullptr) {
+        string color = objects.at(currentFloor).at(y * width + x)->getColor();
+        cout << "\033[" << colorCode(color) << "m" << 
+            objects.at(currentFloor).at(y * width + x)->getlabel() << "\033[m";
+    } else {
+        cout << maps.at(currentFloor).at(y * width + x);
+    }
+}
+
 
 // display board
 void Board::display() {
 
-    // update explored status of chamber
-    for (auto &it : chambers.at(currentFloor)) {
-        if ((it->isIn(hero->getX(), hero->getY())) || 
-            (it->inOneBlockRadius(hero->getX(), hero->getY()))) it->setIsExplored(true);
-    }
+    if (mode == "hard") {
+        // update explored status of chamber
+        for (auto &it : chambers.at(currentFloor)) {
+            if ((it->isIn(hero->getX(), hero->getY())) || 
+                (it->inOneBlockRadius(hero->getX(), hero->getY()))) it->setIsExplored(true);
+        }
 
-    // update explored status of passage
-    for (auto &it : passages.at(currentFloor)) {
-        if ((it->isIn(hero->getX(), hero->getY())) || 
-            (it->inOneBlockRadius(hero->getX(), hero->getY()))) it->setIsExplored(true);
-    }
-    
-    // print row by row and col by col within each row
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
+        // update explored status of passage
+        for (auto &it : passages.at(currentFloor)) {
+            if ((it->isIn(hero->getX(), hero->getY())) || 
+                (it->inOneBlockRadius(hero->getX(), hero->getY()))) it->setIsExplored(true);
+        }
+        
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
 
-            bool inChambersOrPassage = false;
+                bool inChambersOrPassage = false;
 
-            for (auto &it : chambers.at(currentFloor)) {
+                for (auto &it : chambers.at(currentFloor)) {
 
-                if (it->isIn(j, i) || it->inOneBlockRadius(j, i)) {
-                    inChambersOrPassage = true;
-
-                    if (it->getIsExplored()) {
-                        if (objects.at(currentFloor).at(i * width + j) != nullptr) {
-                            string color = objects.at(currentFloor).at(i * width + j)->getColor();
-                            cout << "\033[" << colorCode(color) << "m" << 
-                                objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
-                        } else {
-                            cout << maps.at(currentFloor).at(i * width + j);
-                        }
-                    } else {
-                        if (maps.at(currentFloor).at(i * width + j) == '+') {
-                            inChambersOrPassage = false;
-                            break;
-                        }
-                        cout << " ";
-                    }
-                    break;
-                }
-            }
-
-            
-            if (inChambersOrPassage == false) {
-                for (auto &it : passages.at(currentFloor)) {
                     if (it->isIn(j, i) || it->inOneBlockRadius(j, i)) {
                         inChambersOrPassage = true;
 
-                        if (it->getIsExplored()) {
-                            if (objects.at(currentFloor).at(i * width + j) != nullptr) {
-                                string color = objects.at(currentFloor).at(i * width + j)->getColor();
-                                cout << "\033[" << colorCode(color) << "m" << 
-                                    objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
-                            } else {
-                                cout << maps.at(currentFloor).at(i * width + j);
+                        if (it->getIsExplored()) printTile(j, i);
+                        else {
+                            if (maps.at(currentFloor).at(i * width + j) == '+') {
+                                inChambersOrPassage = false;
+                                break;
                             }
-                        } else {
                             cout << " ";
                         }
                         break;
                     }
                 }
-            }
 
-            if (! inChambersOrPassage) {
+                
+                if (! inChambersOrPassage) {
+                    for (auto &it : passages.at(currentFloor)) {
+                        if (it->isIn(j, i) || it->inOneBlockRadius(j, i)) {
+                            inChambersOrPassage = true;
+                            if (it->getIsExplored()) printTile(j, i);
+                            else cout << " ";
+                            break;
+                        }
+                    }
+                }
+
+                if (! inChambersOrPassage) {
+                    printTile(j, i);
+                }
+
+            }
+            cout << endl;
+        }
+
+    } else if (mode == "basic") {
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 if (objects.at(currentFloor).at(i * width + j) != nullptr) {
                     string color = objects.at(currentFloor).at(i * width + j)->getColor();
                     cout << "\033[" << colorCode(color) << "m" << 
-                        objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
+                    objects.at(currentFloor).at(i * width + j)->getlabel() << "\033[m";
                 } else {
                     cout << maps.at(currentFloor).at(i * width + j);
                 }
             }
-
+            cout << endl;
         }
-        cout << endl;
     }
+
     
     // print information board
     Race *heroPtr = static_cast<Race *>(hero.get());

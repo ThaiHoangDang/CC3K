@@ -9,6 +9,7 @@
 
 class Board {
     std::shared_ptr<Object> hero;
+    std::string mode;
     std::vector<std::vector<int>> heroPositions; // hero positions in each floor 
     std::vector<std::vector<char>> maps; // map layout of all floors
     std::vector<std::vector<std::shared_ptr<Object>>> objects; // objects layout of all floors
@@ -20,7 +21,7 @@ class Board {
     std::string message = "Player Character has been spawned";
 
     public:
-        Board(const std::string &map, std::shared_ptr<Object> hero);
+        Board(const std::string &map, std::shared_ptr<Object> hero, std::string mode);
         ~Board();
         void addTurn();
         void resetTurn();
@@ -28,6 +29,7 @@ class Board {
         int getNumFloor();
         void moveHero(const std::string &dir);
         void moveEnemies();
+        void printTile(int x, int y);
         void display();
 };
 

@@ -126,12 +126,18 @@ bool end(Race *hero, string status) {
 
 
 // run the game
-bool run(const string &map, const int seed = seedGenerator()) {
+bool run(const string &map, const string &mode, const int seed = seedGenerator()) {
 
     // check if map name is valid
     ifstream testMap {"layout/" + map};
     if (! testMap.is_open()) {
         cout << "Cannot find map!" << endl;
+        return 0;
+    }
+
+    // check if valid mode
+    if (mode != "basic" && mode != "hard") {
+        cout << "Invalid mode, only baic/hard" << endl;
         return 0;
     }
 
@@ -155,7 +161,7 @@ bool run(const string &map, const int seed = seedGenerator()) {
     Race *heroPtr = static_cast<Race *>(hero.get());
 
     // generate map
-    unique_ptr<Board> board = make_unique<Board>(map, hero);
+    unique_ptr<Board> board = make_unique<Board>(map, hero, mode);
 
     // game begin message
     printFile("display/begin.txt");
@@ -231,14 +237,14 @@ bool run(const string &map, const int seed = seedGenerator()) {
 int main(int argc, char *argv[]) {
 
     if (argc == 1) {  // no args provided
-        while (run("default.txt"));
+        while (run("default.txt", "basic"));
 
     } else if (argc == 2) {  // process map
         string map = argv[1];
-        while (run(map));
+        while (run(map, "basic"));
 
     } else {  // process map and seed
-        string map, seed;
+        string map, seed, mode;
 
         for (int i = 1; i < argc; i++) {
             string temp = argv[i];
@@ -246,13 +252,20 @@ int main(int argc, char *argv[]) {
             if ((temp == "-s") && (i != argc - 1)) {
                 i++;
                 seed = argv[i];
+            } else if ((temp == "-m") && (i != argc - 1)) {
+                i++;
+                mode = argv[i];
             } else {
                 map = argv[i];
             }
         }
 
-        if (map != "" && seed != "") while(run(map, stoi(seed)));
-        else if (map != "") while(run(map));
-        else if (seed != "") while(run("default.txt", stoi(seed)));
+        if (map != "" && seed != "" && mode != "") while(run(map, mode, stoi(seed)));
+        else if (map != "" && seed != "") while(run(map, "normal", stoi(seed)));
+        else if (map != "" && mode != "") while(run(map, mode));
+        else if (seed != "" && mode != "") while(run("default.txt", mode, stoi(seed)));
+        else if (map != "") while(run(map, "normal"));
+        else if (mode != "") while(run("default.txt", mode));
+        else if (seed != "") while(run("default.txt", "normal", stoi(seed)));
     }
 }
