@@ -199,9 +199,31 @@ void linkDragonAndHoard(vector<vector<shared_ptr<Object>>> &objects) {
 }
 
 
+// determine the height and width of map
+vector<int> heightWidthDetection(const std::string &map) {
+    string firstLine, line;
+    ifstream f {"layout/" + map};
+    getline(f, firstLine);
+    getline(f, line);
+    int height = 2;
+    int width = firstLine.length();
+
+    while (line.length() != 0) {
+        if (line == firstLine) break;
+        getline(f, line);
+        height++;
+    }
+
+    return vector<int>{width, height};
+}
+
+
 Board::Board(const std::string &map, shared_ptr<Object> hero, string mode): hero {hero}, mode {mode} {
     int numObj = 0;
     string line;
+    vector<int> heightWidth = heightWidthDetection(map);
+    width = heightWidth.at(0);
+    height = heightWidth.at(1);
     ifstream f {"layout/" + map};
     getline(f, line);
     

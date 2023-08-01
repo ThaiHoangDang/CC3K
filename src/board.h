@@ -16,7 +16,8 @@ class Board {
     std::vector<std::vector<std::unique_ptr<Extender>>> chambers; // chambers of all floors
     std::vector<std::vector<std::unique_ptr<Extender>>> passages; // passages of all floors
 
-    const int height = 25, width = 79, numPotions = 10, numEnemies = 20, numGold = 10;
+    const int numPotions = 10, numEnemies = 20, numGold = 10;
+    int width, height;
     unsigned int currentFloor = 0, enemiesTurn = 0;
     std::string message = "Player Character has been spawned";
 
