@@ -382,6 +382,19 @@ vector<int> getNewPosition(Object* obj, const string &dir) {
 }
 
 
+// get direction to other that is in one block radius
+string getDirection(const string &dir) {
+    if (dir == "no") return "North";
+    if (dir == "so") return "South";
+    if (dir == "we") return "West";
+    if (dir == "ea") return "East";
+    if (dir == "nw") return "North West";
+    if (dir == "ne") return "North East";
+    if (dir == "sw") return "South West";
+    return "South East";   
+}
+
+
 // hero turn
 void Board::moveHero(const string &dir) {
     Race *heroPtr = static_cast<Race *>(hero.get());
@@ -393,6 +406,8 @@ void Board::moveHero(const string &dir) {
 
     // check if it is a valid move
     if (c == '.' || c == '#' || c == '+') {
+        message += "Player goes " + getDirection(dir) + ". ";
+
         shared_ptr<Object> o = objects.at(currentFloor).at(newPosition.at(0) + 
                 newPosition.at(1) * width);
 
@@ -447,6 +462,7 @@ void Board::moveHero(const string &dir) {
             } else {  // player attacks enemies
                 Living *enemyPtr = static_cast<Living *>(o.get());
                 int damage = heroPtr->attack(enemyPtr);
+                message.clear();
 
                 if (enemyPtr->getHp() != 0) {  // enemy not die
                     if (damage == 0) {

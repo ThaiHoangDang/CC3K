@@ -1,4 +1,5 @@
 #include <string>
+#include <sstream>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -234,6 +235,17 @@ bool run(const string &map, const string &mode, const int seed = seedGenerator()
 }
 
 
+// check if seed is a number
+bool isNumber(const string& input) {
+    istringstream iss(input);
+    int num;
+    iss >> std::noskipws >> num; // std::noskipws considers leading whitespace invalid
+
+    // Check if the entire string was consumed and if there was no error during conversion
+    return iss.eof() && !iss.fail();
+}
+
+
 int main(int argc, char *argv[]) {
 
     if (argc == 1) {  // no args provided
@@ -258,6 +270,11 @@ int main(int argc, char *argv[]) {
             } else {
                 map = argv[i];
             }
+        }
+
+        if (! isNumber(seed)) {
+            cout << "invalid seed!" << endl;
+            return 0;
         }
 
         if (map != "" && seed != "" && mode != "") while(run(map, mode, stoi(seed)));
