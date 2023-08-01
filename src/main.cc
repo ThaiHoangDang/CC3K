@@ -136,8 +136,8 @@ bool run(const string &map, const string &mode, const int seed = seedGenerator()
     }
 
     // check if valid mode
-    if (mode != "basic" && mode != "hard") {
-        cout << "Invalid mode, only baic/hard" << endl;
+    if (mode != "normal" && mode != "hard") {
+        cout << "Invalid mode, only normal/hard" << endl;
         return 0;
     }
 
@@ -237,11 +237,11 @@ bool run(const string &map, const string &mode, const int seed = seedGenerator()
 int main(int argc, char *argv[]) {
 
     if (argc == 1) {  // no args provided
-        while (run("default.txt", "basic"));
+        while (run("default.txt", "normal"));
 
     } else if (argc == 2) {  // process map
         string map = argv[1];
-        while (run(map, "basic"));
+        while (run(map, "normal"));
 
     } else {  // process map and seed
         string map, seed, mode;
