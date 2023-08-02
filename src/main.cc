@@ -272,7 +272,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        if (! isNumber(seed)) {
+        if ((seed != "") && (! isNumber(seed))) {
             cout << "invalid seed!" << endl;
             return 0;
         }
