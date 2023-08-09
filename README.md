@@ -1,9 +1,6 @@
 <h1 align="center">
     <br>
-    <img src="logo.png" width="200"></a>
-    <br>
-        CC3k
-    <br>
+    <img src="/src/data/logo.png" width="200"></a>
 </h1>
 
 <h4 align="center">ChamberCrawler3000 (CC3k) is a simplified rogue-like game!</h4>
@@ -14,9 +11,6 @@
     <a href="#installation">Installation</a> •
     <a href="#license">License</a>
 </p>
-
-![screenshot](/src/data/pic1.png)
-
 
 <p align="center">
   <img src="/src/data/pic1.png" />
