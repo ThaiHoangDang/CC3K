@@ -43,6 +43,8 @@ At the beginning of the game, user can choose between five different heroes
 | Vampire       |  50 |  25 |  25 | <li>No maximum HP</li><li>Gains 5 HP every successful attack</li><li>Lose 5 HP instead of attack Dwarf</li> |
 | Troll         | 120 |  25 |  15 | <li>Regains 5 HP every turn</li>
 | Goblin        | 110 |  15 |  20 | <li>steals 5 gold from every slain enemy</li><li>Orcs does 50% more damage to Goblin</li> |
+
+Max HP for all races is the starting HP, except for vampires that have no maximum. In our game board, the player character is always denoted by the `@` symbol.
 ### Enemies
 
 ### Treasure
