@@ -62,14 +62,28 @@ randomly within the confines of the chamber they were spawned in, while Dragons 
 | Halfling      | 100 |  15 |  20 | <li>Has a 50% chance to cause the player character to miss in combat</li> |
 
 
-By default, `merchants` are neutral to all parties. However, merchants can be attacked and slain by the player character. Attacking or slaying a `Merchant` causes every `Merchant` from that point forward to become hostile to the player character (and will attack them if they pass within a `one block radius`).
+By default, `Merchants` are neutral to all parties. However, `Merchants` can be attacked and slain by the player character. Attacking or slaying a `Merchant` causes every `Merchant` from that point forward to become hostile to the player character (and will attack them if they pass within a `one block radius`).
 
 Upon their demise, any enemy that is not a `Dragon`, `Human`, or `Merchant` will drop either a small pile or normal pile of gold.
 
-Enemies are denoted on the map as follows: (`H`)uman, d(`W`)arf, (`E`)lf, (`O`)rc, (`M`)erchant, (`D`)ragon, Half(`L`)ing.
+Enemies are denoted on the map as follows: (`H`)uman, d(`W`)arf, (`E`)lf, (`O`)rc, (`M`)erchant, (`D`)ragon, and Half(`L`)ing.
 
 ### Potions
+Potions are of two types: `positive` and `negative`. Regardless of the potion itself, all potions are denoted on the map with a `P` symbol. Accordingly, a potion cannot be used unless a player is standing within a `one block radius` of it.
 
+The effects of a particular potion **are not known until it is used for the first time**. In other words, hero will only learn about the effects of that particular potion after using it, while other potions will **NOT** have their effects revealed.
+
+>Positive Potions:
+>- Restore health (`RH`): restore up to 10 HP (cannot exceed maximum prescribed by race)
+>- Boost Atk (`BA`): increase ATK by 5
+>- Boost Def (`BD`): increase Def by 5
+
+>Negative Potions:
+>- Poison health (`PH`): lose up to 10 HP (cannot fall below 0 HP)
+>- Wound Atk (`WA`): decrease Atk by 5
+>- Wound Def (`WD`): decrease Def by 5
+
+The effects of `RH` and `PH` are permanent while the effects of all other potions are limited to the floor they are used on. For example, using a `BA` potion will only boost the player character’s `Atk` until the beginning of the next floor. Note that the PC’s `Atk` and `Def` can never drop below 0.
 ### Treasure
 
 ### Control
