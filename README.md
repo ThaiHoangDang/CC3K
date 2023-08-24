@@ -90,9 +90,15 @@ Treasure in CC3k consists only of `gold`. Gold can be in several types of piles:
 A `Merchant Hoard` is dropped upon the death of a `Merchant`. Gold dropped by a `Merchant` (value 4) or a human (2 normal piles, value 2x2=4) is picked up only when the PC walks over it.
 
 ### Control 🕹
+The following commands can be supplied to your command interpreter:
+- `no`, `so`, `ea`, `we`, `ne`, `nw`, `se`, `sw`: moves the player character one block in the appropriate cardinal direction.
+- `u`  + *direction*: uses the potion indicated by the direction (e.g. no, so, ea).
+- `a` + *direction*: attacks the enemy in the specified direction (only if the monster is in one block north of the @).
+- `f`: stops enemies from moving until this key is pressed again.
+- `r`: restarts the game. All stats, inventory, and gold are reset. A new race should be selected.
+- `q`: allows the player to admit defeat and exit the game.
 
 ### Game Flow 🎲
-
 
 ## Features
 
