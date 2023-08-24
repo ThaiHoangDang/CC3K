@@ -98,7 +98,21 @@ The following commands can be supplied to your command interpreter:
 - `r`: restarts the game. All stats, inventory, and gold are reset. A new race should be selected.
 - `q`: allows the player to admit defeat and exit the game.
 
+### Combat
+By default, all enemies except for `Merchants` and `Dragons` are hostile to the player character. If the player character enters within a 1 block radius of any hostile enemy, they will attempt to attack the player character (even before the player character has had a chance to attack). If the player character is not within a 1 block radius of the enemy then it will resume random movement.
+
+`Dragons` are considered hostile when the player is next to its `Dragon hoard` or itself, and will use their fire breath to defend its hoard. This means that a `Dragon` might attack even if the player is not next to the `Dragon`, but because it is next to a `Dragon hoard`. Recall that `Merchants` can become hostile when one is attacked/slain by the player character.
+
+Combat is resolved as follows: `Enemies` will auto-attack players given the previously specified criteria, however, there is a `50%` chance their attack misses. The player character has the option of attacking any of the 8 squares adjacent to them and within a 1 block radius. The `PC` never misses. Recall, that the `PC` has initiative and always attacks first.
+
+`Damage` is calculated as follows: 
+
+>`Damage(Defender) = ceiling((100/(100 + Def(Defender))) ∗ Atk(Attacker))`
+
+where Attacker specifies the attacking character (enemy or PC) and defender specifies the character being attacked. Thus, in a single round a character can be both an attacker and a defender.
 ### Game Flow 🎲
+1. Choosing Hero
+2. 
 
 ## Features
 
