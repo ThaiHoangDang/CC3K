@@ -33,7 +33,7 @@ Cheers 🤗, <br>
 Hoang Dang.
 
 ## Gameplay
-### Heroes
+### Heroes 🐈
 At the beginning of the game, user can choose between five different heroes
 
 | Hero          | HP  | Atk | Def | Ability |
@@ -45,7 +45,7 @@ At the beginning of the game, user can choose between five different heroes
 | Goblin        | 110 |  15 |  20 | <li>steals 5 gold from every slain enemy</li><li>Orcs does 50% more damage to Goblin</li> |
 
 Max HP for all races is the starting HP, except for vampires that have no maximum. In our game board, the player character is always denoted by the `@` symbol.
-### Enemies
+### Enemies 😈
 In a traditional rogue-like game, the enemy character would
 have some degree of artificial intelligence. However, for simplicity in CC3k, enemies, except for dragons, move one square
 randomly within the confines of the chamber they were spawned in, while Dragons are stationary and always guard a treasure hoard.
@@ -68,7 +68,7 @@ Upon their demise, any enemy that is not a `Dragon`, `Human`, or `Merchant` will
 
 Enemies are denoted on the map as follows: (`H`)uman, d(`W`)arf, (`E`)lf, (`O`)rc, (`M`)erchant, (`D`)ragon, and Half(`L`)ing.
 
-### Potions
+### Potions 🧪
 Potions are of two types: `positive` and `negative`. Regardless of the potion itself, all potions are denoted on the map with a `P` symbol. Accordingly, a potion cannot be used unless a player is standing within a `one block radius` of it.
 
 The effects of a particular potion **are not known until it is used for the first time**. In other words, hero will only learn about the effects of that particular potion after using it, while other potions will **NOT** have their effects revealed.
@@ -84,11 +84,15 @@ The effects of a particular potion **are not known until it is used for the firs
 >- Wound Def (`WD`): decrease Def by 5
 
 The effects of `RH` and `PH` are permanent while the effects of all other potions are limited to the floor they are used on. For example, using a `BA` potion will only boost the player character’s `Atk` until the beginning of the next floor. Note that the PC’s `Atk` and `Def` can never drop below 0.
-### Treasure
+### Treasure 💰
+Treasure in CC3k consists only of `gold`. Gold can be in several types of piles: `small` (value 1), `normal` (value 2), `merchant hoard` (value 4), and `dragon hoard` (value 6). Recall, a `Dragon` must always protect a `Dragon Hoard` whenever it randomly spawns. A `Dragon Hoard` can only be picked up once the `Dragon` guarding it has been slain. Gold, regardless of type, is denoted by ‘`G`’ on the map.
 
-### Control
+A `Merchant Hoard` is dropped upon the death of a `Merchant`. Gold dropped by a `Merchant` (value 4) or a human (2 normal piles, value 2x2=4) is picked up only when the PC walks over it.
 
-### Game Flow
+### Control 🕹
+
+### Game Flow 🎲
+
 
 ## Features
 
