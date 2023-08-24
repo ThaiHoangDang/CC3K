@@ -45,6 +45,16 @@ At the beginning of the game, user can choose between five different heroes
 | Goblin        | 110 |  15 |  20 | <li>steals 5 gold from every slain enemy</li><li>Orcs does 50% more damage to Goblin</li> |
 
 Max HP for all races is the starting HP, except for vampires that have no maximum. In our game board, the player character is always denoted by the `@` symbol.
+
+### Control 🕹
+The following commands can be supplied to your command interpreter:
+- `no`, `so`, `ea`, `we`, `ne`, `nw`, `se`, `sw`: moves the player character one block in the appropriate cardinal direction.
+- `u`  + *direction*: uses the potion indicated by the direction (e.g. no, so, ea).
+- `a` + *direction*: attacks the enemy in the specified direction (only if the monster is in one block north of the @).
+- `f`: stops enemies from moving until this key is pressed again.
+- `r`: restarts the game. All stats, inventory, and gold are reset. A new race should be selected.
+- `q`: allows the player to admit defeat and exit the game.
+
 ### Enemies 😈
 In a traditional rogue-like game, the enemy character would
 have some degree of artificial intelligence. However, for simplicity in CC3k, enemies, except for dragons, move one square
@@ -88,15 +98,6 @@ The effects of `RH` and `PH` are permanent while the effects of all other potion
 Treasure in CC3k consists only of `gold`. Gold can be in several types of piles: `small` (value 1), `normal` (value 2), `merchant hoard` (value 4), and `dragon hoard` (value 6). Recall, a `Dragon` must always protect a `Dragon Hoard` whenever it randomly spawns. A `Dragon Hoard` can only be picked up once the `Dragon` guarding it has been slain. Gold, regardless of type, is denoted by ‘`G`’ on the map.
 
 A `Merchant Hoard` is dropped upon the death of a `Merchant`. Gold dropped by a `Merchant` (value 4) or a human (2 normal piles, value 2x2=4) is picked up only when the PC walks over it.
-
-### Control 🕹
-The following commands can be supplied to your command interpreter:
-- `no`, `so`, `ea`, `we`, `ne`, `nw`, `se`, `sw`: moves the player character one block in the appropriate cardinal direction.
-- `u`  + *direction*: uses the potion indicated by the direction (e.g. no, so, ea).
-- `a` + *direction*: attacks the enemy in the specified direction (only if the monster is in one block north of the @).
-- `f`: stops enemies from moving until this key is pressed again.
-- `r`: restarts the game. All stats, inventory, and gold are reset. A new race should be selected.
-- `q`: allows the player to admit defeat and exit the game.
 
 ### Combat
 By default, all enemies except for `Merchants` and `Dragons` are hostile to the player character. If the player character enters within a 1 block radius of any hostile enemy, they will attempt to attack the player character (even before the player character has had a chance to attack). If the player character is not within a 1 block radius of the enemy then it will resume random movement.
