@@ -46,10 +46,31 @@ At the beginning of the game, user can choose between five different heroes
 
 Max HP for all races is the starting HP, except for vampires that have no maximum. In our game board, the player character is always denoted by the `@` symbol.
 ### Enemies
+In a traditional rogue-like game, the enemy character would
+have some degree of artificial intelligence. However, for simplicity in CC3k, enemies, except for dragons, move one square
+randomly within the confines of the chamber they were spawned in, while Dragons are stationary and always guard a treasure hoard.
 
-### Treasure
+
+| Enemy         | HP  | Atk | Def | Ability |
+| ------------- | --- | --- | --- | ------- |
+| Human         | 140 |  20 |  20 | <li>Drops two normal piles of gold </li> |
+| Dwarf         | 100 |  20 |  30 | <li>Vampires are allergic to dwarves and lose 5 HP rather than gain </li> |
+| Elf           | 140 |  30 |  10 | <li>Gets two attacks against every race except drow</li> |
+| Orcs          | 180 |  30 |  25 | <li>Does 50% more damage to goblins</li>
+| Merchant      |  30 |  70 |   5 | <li>Steals 5 gold from every slain enemy</li> |
+| Dragon        | 150 |  20 |  20 | <li>Always guards a treasure hoard</li> |
+| Halfling      | 100 |  15 |  20 | <li>Has a 50% chance to cause the player character to miss in combat</li> |
+
+
+By default, `merchants` are neutral to all parties. However, merchants can be attacked and slain by the player character. Attacking or slaying a `Merchant` causes every `Merchant` from that point forward to become hostile to the player character (and will attack them if they pass within a `one block radius`).
+
+Upon their demise, any enemy that is not a `Dragon`, `Human`, or `Merchant` will drop either a small pile or normal pile of gold.
+
+Enemies are denoted on the map as follows: (`H`)uman, d(`W`)arf, (`E`)lf, (`O`)rc, (`M`)erchant, (`D`)ragon, Half(`L`)ing.
 
 ### Potions
+
+### Treasure
 
 ### Control
 
