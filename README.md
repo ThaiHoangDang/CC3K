@@ -41,10 +41,10 @@ At the beginning of the game, user can choose between five different heroes
 
 | Hero          | HP  | Atk | Def | Ability |
 | ------------- | --- | --- | --- | ------- |
-| Shade         | 125 |  25 |  25 | <li>Double the score at the end of game </li> |
+| Shade         | 125 |  25 |  25 | Double the score at the end of game |
 | Drow          | 150 |  25 |  15 | <li>x1.5 effect of potions</li><li>Elf can only attack once every turn</li> |
 | Vampire       |  50 |  25 |  25 | <li>No maximum HP</li><li>Gains 5 HP every successful attack</li><li>Lose 5 HP instead of attack Dwarf</li> |
-| Troll         | 120 |  25 |  15 | <li>Regains 5 HP every turn</li>
+| Troll         | 120 |  25 |  15 | Regains 5 HP every turn |
 | Goblin        | 110 |  15 |  20 | <li>steals 5 gold from every slain enemy</li><li>Orcs does 50% more damage to Goblin</li> |
 
 Max HP for all races is the starting HP, except for vampires that have no maximum. In our game board, the player character is always denoted by the `@` symbol.
