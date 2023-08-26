@@ -127,18 +127,38 @@ Follow <a href="#Installation">Installation</a> to download and setup the game i
 ```
 ./cc3k
 ```
+Default map layout with 5 floors, each floor has 5 chambers, and random objects generation.
 
 #### Seed Specified
 ```
-./cc3k
+./cc3k -s [seed]
+```
+Default map layout with 5 floors, each floor has 5 chambers, objects are generated based on provided seed!
+
+Example:
+```
+./cc3k -s 123
 ```
 #### Map Specified
 ```
-./cc3k
+./cc3k [map]
+```
+If provided file only has map layout but no objects like `hero`/`enemies`/`potions`/`treasure`/`stair`, the program will generate random objects for you. You can try this out by running:
+```
+./cc3k mapWithNoObjects.txt
+```
+
+If provided file has both map layout and objects layout: The program will generate map and objects based on provided file, this ensures that there will be no random objects generation. You can try this out by running:
+```
+./cc3k mapWithObjects.txt
 ```
 #### Game Mode Specified
 ```
-./cc3k
+./cc3k -m [mode]
+```
+For now, CC3k only has `normal` and `hard` game modes. While `normal` mode is applied by default, `hard` mode needs to be specified when running the game. You can read more about hard mode <a href="#Hard Mode 💀">here</a>.
+```
+./cc3k -m hard
 ```
 #### Combination
 ```
@@ -175,10 +195,12 @@ The followings are all symbols used in the game
 
 ## Features
 
-### Beautiful UI
-### Create your own maps!
-### Seeds Support
+### Beautiful UI ✨
+### Create your own maps! 🗺
+### Seeds Support 🌱
+When there is no seed specified when running the game, a random seed for that game will be generated and stored in `CC3k/data/seeds.txt`, user can later copy the seed use it to re-play a again.
 
+### Hard Mode 💀
 ## Installation
 Open either `Terminal` if you are using MacOS/Linux or `Command Prompt` if you are a Window user.
 
@@ -199,6 +221,10 @@ Your game is now ready to be played!
 > * [Document](/src/design.pdf) 
 > * [UML](/src/uml.pdf)
 
+> Future Plan
+> * There will be a few default maps when running ./cc3k instead of one like right now
+> * More game modes
+> * Random map generation :D OMG SUPER HARD!
 ## License
 - [MIT License](LICENSE)
 ---
