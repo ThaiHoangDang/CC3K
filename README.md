@@ -156,7 +156,7 @@ If provided file has both map layout and objects layout: The program will genera
 ```
 ./cc3k -m [mode]
 ```
-For now, CC3k only has `normal` and `hard` game modes. While `normal` mode is applied by default, `hard` mode needs to be specified when running the game. You can read more about hard mode <a href="#Hard Mode">here</a>.
+For now, CC3k only has `normal` and `hard` game modes. While `normal` mode is applied by default, `hard` mode needs to be specified when running the game. You can read more about hard mode <a href="#Features">here</a>.
 ```
 ./cc3k -m hard
 ```
