@@ -206,10 +206,33 @@ Game beginning, Hero choosing, and Game Ending are supported with ASCII designs 
 </p>
 
 ### Create your own maps! 🗺
+All maps used in the game are stored in `CC3k/src/layout`. By applying some algorithms, users can now create there own maps instead of following the default layout like in `default.txt`. You can try this out by running:
+```
+./cc3k layout1.txt
+```
+or even better
+```
+./cc3k big.txt
+```
+<p align="center">
+  <img src="/src/data/pic3.png" />
+</p>
+
+> **Note**: Users still need to follow some basic map structure. Try to do something similar to the provided maps and don't do anything weird 😂
+### Game stat 📊
+Game statistic will be displayed at the end of the game
 ### Seeds Support 🌱
-When there is no seed specified when running the game, a random seed for that game will be generated and stored in `CC3k/data/seeds.txt`, user can later copy the seed use it to re-play a again.
+If there is no seed specified when running the game, a random seed for that play will be generated and stored in `CC3k/data/seeds.txt` (the last one). Thus, user can later copy the seed use it to re-play that game a again.
+
+In other words, the purpose of seed is to ensure randomizations to be the same. Everytime you use the same seed, objects will be generated in the same way.
 
 ### Hard Mode 💀
+Player only knows the layout of chambers and passages if he/she has been there before, otherwise they are all **blank**!
+
+<p align="center">
+  <img src="/src/data/pic4.png" />
+</p>
+
 ## Installation
 Open either `Terminal` if you are using MacOS/Linux or `Command Prompt` if you are a Window user.
 

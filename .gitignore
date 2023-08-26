@@ -37,3 +37,5 @@ temp/
 
 # VS
 .vscode/
+
+.DS_Store
