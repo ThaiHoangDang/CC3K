@@ -98,9 +98,7 @@ The effects of a particular potion **are not known until it is used for the firs
 
 The effects of `RH` and `PH` are permanent while the effects of all other potions are limited to the floor they are used on. For example, using a `BA` potion will only boost the player character’s `Atk` until the beginning of the next floor. Note that the PC’s `Atk` and `Def` can never drop below 0.
 ### Treasure 💰
-Treasure in CC3k consists only of `gold`. Gold can be in several types of piles: `small` (value 1), `normal` (value 2), `merchant hoard` (value 4), and `dragon hoard` (value 6). Recall, a `Dragon` must always protect a `Dragon Hoard` whenever it randomly spawns. A `Dragon Hoard` can only be picked up once the `Dragon` guarding it has been slain. Gold, regardless of type, is denoted by ‘`G`’ on the map.
-
-A `Merchant Hoard` is dropped upon the death of a `Merchant`. Gold dropped by a `Merchant` (value 4) or a human (2 normal piles, value 2x2=4) is picked up only when the PC walks over it.
+Treasure in CC3k consists only of `gold`. Gold can be in several types of piles: `small` (value 1), `normal` (value 2), and `dragon hoard` (value 6). Recall, a `Dragon` must always protect a `Dragon Hoard` whenever it randomly spawns. A `Dragon Hoard` can only be picked up once the `Dragon` guarding it has been slain. Gold, regardless of type, is denoted by `G` on the map.
 
 ### Combat
 By default, all enemies except for `Merchants` and `Dragons` are hostile to the player character. If the player character enters within a 1 block radius of any hostile enemy, they will attempt to attack the player character (even before the player character has had a chance to attack). If the player character is not within a 1 block radius of the enemy then it will resume random movement.
@@ -116,17 +114,56 @@ Combat is resolved as follows: `Enemies` will auto-attack players given the prev
 where Attacker specifies the attacking character (enemy or PC) and defender specifies the character being attacked. Thus, in a single round a character can be both an attacker and a defender.
 
 ### Game Execution 🏃
-Follow <a href="#Installation">Installation</a> to download and setup the game if you have not done so. 
+Follow <a href="#Installation">Installation</a> to download and setup the game if you have not done so. After that, `cd` to `CC3k/src` and the game can be executed in the following ways:
 #### Default
-cd to CC3k/
 ```
 ./cc3k
 ```
-#### Seed
-#### Game mode
 
+#### Seed Specified
+```
+./cc3k
+```
+#### Map Specified
+```
+./cc3k
+```
+#### Game Mode Specified
+```
+./cc3k
+```
+#### Combination
+```
+./cc3k
+```
 ### Game End 🏁
-A game session ends in one of the following ways: the player character **reaches the stairs on floor 5**, the player character’s **health reaches 0**, the player **restarts the game or quits**. A player’s score is only generated in the first of above two cases. Score is determined by the amount of gold they have collected in their current character’s life time.
+A game session ends in one of the following ways: 
+- the player character **reaches the last stair**
+- the player character’s **health reaches 0**
+- the player **restarts the game or quits**
+
+A player’s score is only generated in the first two cases. `Score` is determined by the **amount of gold** they have collected in their current character’s life time.
+
+### Display ©
+The followings are all symbols used in the game
+
+| Symbol    | Meaning    | Type   | Color | Note    |
+| ----------| ---------- | ------ | :---: | ------- |
+| `@`       | `Shade`/`Drow`/`Vampire`/`Troll`/`Goblin` | Hero   | 🟦 |
+| `H`       | `Human`    | Enemy  | 🟥    |
+| `W`       | `Dwarf`    | Enemy  | 🟥    |
+| `E`       | `Elf`      | Enemy  | 🟥    |
+| `O`       | `Orc`      | Enemy  | 🟥    |
+| `M`       | `Merchant` | Enemy  | 🟥    |
+| `D`       | `Dragon`   | Enemy  | 🟥    |
+| `L`       | `Halfling` | Enemy  | 🟥    |
+| `P`       | `RH`/`BA`/`BD`/`PH`/`WA`/`WD` | Potion | 🟩 | Can be used by walking on |
+| `G`       | `Small Gold`/`Normal Gold`/`Dragon Hoard` | Treasure | 🟨 | Can be picked up by walking on |
+| `/`       | `Stair`    | Object | 🟦    | Takes Hero to new floor |
+| `-` and `\|` | `Wall`  | Map    | ⬜️    | Not walkable on |
+| `+`       | `Doorway`  | Map    | ⬜️    |
+| `#`       | `Passage`  | Map    | ⬜️    |
+| `.`       | `Floor tile` | Map   | ⬜️    |
 
 ## Features
 
