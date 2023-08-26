@@ -35,7 +35,12 @@ Hoang Dang.
 ## Gameplay
 
 ### Story
-- Reach stair
+`Hoang` is a king in ChinSu kingdom, he has a beatiful daughter, `Nam`. This year, Nam turns 18 and Hoang wants to find for his daughter a good hushband. In his speech in front of the citizens, Hoang said "*No matter who you are, no matter where you are from, whoever complete the Dark Dungeon, consisting of different floors with many dangerous enemies, will get my daughter as your wife!*".
+
+In this game, you will be a hero and your goal is to complete the Dark Dungeon by reaching the stair of the last floor.
+
+**ARE YOU READYYY!!!???**
+
 ### Heroes 🐈
 At the beginning of the game, user can choose between five different heroes
 
