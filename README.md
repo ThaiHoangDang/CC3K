@@ -200,6 +200,11 @@ The followings are all symbols used in the game
 ## Features
 
 ### Beautiful UI ✨
+Game beginning, Hero choosing, and Game Ending are supported with ASCII designs to improve user experience!
+<p align="center">
+  <img src="/src/data/pic2.png" />
+</p>
+
 ### Create your own maps! 🗺
 ### Seeds Support 🌱
 When there is no seed specified when running the game, a random seed for that game will be generated and stored in `CC3k/data/seeds.txt`, user can later copy the seed use it to re-play a again.
