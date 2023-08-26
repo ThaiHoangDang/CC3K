@@ -98,7 +98,15 @@ The effects of a particular potion **are not known until it is used for the firs
 
 The effects of `RH` and `PH` are permanent while the effects of all other potions are limited to the floor they are used on. For example, using a `BA` potion will only boost the player character’s `Atk` until the beginning of the next floor. Note that the PC’s `Atk` and `Def` can never drop below 0.
 ### Treasure 💰
-Treasure in CC3k consists only of `gold`. Gold can be in several types of piles: `small` (value 1), `normal` (value 2), and `dragon hoard` (value 6). Recall, a `Dragon` must always protect a `Dragon Hoard` whenever it randomly spawns. A `Dragon Hoard` can only be picked up once the `Dragon` guarding it has been slain. Gold, regardless of type, is denoted by `G` on the map.
+Treasure in CC3k consists only of `gold`. Gold can be in different types: 
+
+| Name         | Value   |
+| ------------ | ------: |
+| Small Gold   | 1       |
+| Normal Gold  | 2       |
+| Dragon Hoard | 6       |
+
+Recall, a `Dragon` must always protect a `Dragon Hoard` whenever it randomly spawns. A `Dragon Hoard` can only be picked up once the `Dragon` guarding it has been slain. Gold, regardless of type, is denoted by `G` on the map.
 
 ### Combat
 By default, all enemies except for `Merchants` and `Dragons` are hostile to the player character. If the player character enters within a 1 block radius of any hostile enemy, they will attempt to attack the player character (even before the player character has had a chance to attack). If the player character is not within a 1 block radius of the enemy then it will resume random movement.
