@@ -33,6 +33,9 @@ Cheers 🤗, <br>
 Hoang Dang.
 
 ## Gameplay
+
+### Story
+- Reach stair
 ### Heroes 🐈
 At the beginning of the game, user can choose between five different heroes
 
@@ -111,9 +114,19 @@ Combat is resolved as follows: `Enemies` will auto-attack players given the prev
 >`Damage(Defender) = ceiling((100/(100 + Def(Defender))) ∗ Atk(Attacker))`
 
 where Attacker specifies the attacking character (enemy or PC) and defender specifies the character being attacked. Thus, in a single round a character can be both an attacker and a defender.
-### Game Flow 🎲
-1. Choosing Hero
-2. 
+
+### Game Execution 🏃
+Follow <a href="#Installation">Installation</a> to download and setup the game if you have not done so. 
+#### Default
+cd to CC3k/
+```
+./cc3k
+```
+#### Seed
+#### Game mode
+
+### Game End 🏁
+A game session ends in one of the following ways: the player character **reaches the stairs on floor 5**, the player character’s **health reaches 0**, the player **restarts the game or quits**. A player’s score is only generated in the first of above two cases. Score is determined by the amount of gold they have collected in their current character’s life time.
 
 ## Features
 
@@ -122,7 +135,19 @@ where Attacker specifies the attacking character (enemy or PC) and defender spec
 ### Seeds Support
 
 ## Installation
+Open either `Terminal` if you are using MacOS/Linux or `Command Prompt` if you are a Window user.
 
+Make sure you have a C++ compiler by running `g++ --version`. If not, use chat GPT to look up how to download `g++` for Mac/Win/Linux with version `>= 11` (I did so too, it won't take much time!)
+
+`cd` to the your desired directory and clone the repository by running
+```
+git clone https://github.com/ThaiHoangDang/CC3K.git
+```
+After that, `cd` to `CC3k/src`. For example, if you use `Mac` and download the game in `Downloads` folder, run `cd ~/Downloads/CC3k/src`. On the other hand, if you use `Window` and download the game to `Downloads` folder, run `cd %userprofile%\Downloads\CC3k\src`
+
+Run `make` to compile the game (**You only need to do this once, if you have done this before, no need to do this again**). 
+
+Your game is now ready to be played!
 
 ## Releases
 > **Version 1.0.0** (released Aug 2, 2023)
