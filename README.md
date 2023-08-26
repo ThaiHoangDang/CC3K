@@ -161,8 +161,12 @@ For now, CC3k only has `normal` and `hard` game modes. While `normal` mode is ap
 ./cc3k -m hard
 ```
 #### Combination
+You can combine map, seed, and game mode all together when running the game too! The followings are all valid game executions:
 ```
-./cc3k
+./cc3k -s 100 -m hard
+./cc3k -s 123 mapWithNoObjects.txt
+./cc3k mapWithObjects.txt -m normal
+./cc3k mapWithNoObjects.txt -m hard -s 2000
 ```
 ### Game End 🏁
 A game session ends in one of the following ways: 
