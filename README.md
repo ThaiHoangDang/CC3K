@@ -66,13 +66,13 @@ randomly within the confines of the chamber they were spawned in, while Dragons 
 
 | Enemy         | HP  | Atk | Def | Ability |
 | ------------- | --- | --- | --- | ------- |
-| Human         | 140 |  20 |  20 | <li>Drops two normal piles of gold </li> |
-| Dwarf         | 100 |  20 |  30 | <li>Vampires are allergic to dwarves and lose 5 HP rather than gain </li> |
-| Elf           | 140 |  30 |  10 | <li>Gets two attacks against every race except drow</li> |
-| Orcs          | 180 |  30 |  25 | <li>Does 50% more damage to goblins</li>
-| Merchant      |  30 |  70 |   5 | <li>Steals 5 gold from every slain enemy</li> |
-| Dragon        | 150 |  20 |  20 | <li>Always guards a treasure hoard</li> |
-| Halfling      | 100 |  15 |  20 | <li>Has a 50% chance to cause the player character to miss in combat</li> |
+| Human         | 140 |  20 |  20 | Drops two normal piles of gold |
+| Dwarf         | 100 |  20 |  30 | Vampires are allergic to dwarves and lose 5 HP rather than gain |
+| Elf           | 140 |  30 |  10 | Gets two attacks against every race except drow |
+| Orcs          | 180 |  30 |  25 | Does 50% more damage to goblins |
+| Merchant      |  30 |  70 |   5 | Steals 5 gold from every slain enemy |
+| Dragon        | 150 |  20 |  20 | Always guards a treasure hoard |
+| Halfling      | 100 |  15 |  20 | Has a 50% chance to cause the player character to miss in combat |
 
 
 By default, `Merchants` are neutral to all parties. However, `Merchants` can be attacked and slain by the player character. Attacking or slaying a `Merchant` causes every `Merchant` from that point forward to become hostile to the player character (and will attack them if they pass within a `one block radius`).
